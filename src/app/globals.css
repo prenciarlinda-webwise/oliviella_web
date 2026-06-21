@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  /* Backgrounds */
+  --color-cream: #faf6ee;
+  --color-cream-deep: #f2ead9;
+
+  /* Text */
+  --color-ink: #3d3b2f;
+  --color-ink-soft: #6c6a58;
+
+  /* Olive (primary) */
+  --color-olive: #6f774a;
+  --color-olive-deep: #103004; /* brand deep green (logo) */
+  --color-olive-soft: #9aa173;
+  --color-olive-mist: #e7e9d6;
+
+  /* Blush (accent) */
+  --color-blush: #f1cfd3;
+  --color-blush-soft: #fbecee;
+  --color-rose: #d7989d;
+
+  /* Game-day ribbon (yellow / orange) */
+  --color-marigold: #f6a609;
+  --color-marigold-bright: #ffc233;
+}
+
+@theme inline {
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-mulish), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --background: #faf6ee;
+  --foreground: #3d3b2f;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+  }
+
+  ::selection {
+    background: var(--color-blush);
+    color: var(--color-olive-deep);
+  }
+}
+
+/* Soft fade in used on a few sections */
+@keyframes olivella-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: olivella-rise 0.7s ease both;
+}
+
+/* Continuously scrolling game-day promo ribbon (marquee). The track holds two
+   identical groups and slides by -50% so the loop is seamless. */
+@keyframes olivella-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: olivella-marquee 28s linear infinite;
+}
+
+.marquee-track--reverse {
+  animation-direction: reverse;
+}
+
+/* Let visitors stop the scroll to read it. */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
