@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { getBookableExperiences, isPayableTier } from "@/lib/products";
+import { site } from "@/lib/site";
 import { ArrowRight, LeafSmall } from "./icons";
 
 // ─── Charcuterie builder data ────────────────────────────────────────────────
@@ -165,7 +166,6 @@ const nextBtnCls =
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 type Props = {
-  depositLabel: string;
   minDate: string;
   maxDate: string;
   initialSlug?: string;
@@ -173,7 +173,7 @@ type Props = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function BookingForm({ depositLabel, minDate, maxDate, initialSlug }: Props) {
+export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
   const allExperiences = getBookableExperiences();
 
   const defaultSlug =
@@ -209,6 +209,7 @@ export default function BookingForm({ depositLabel, minDate, maxDate, initialSlu
 
   // UI state
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -304,29 +305,33 @@ export default function BookingForm({ depositLabel, minDate, maxDate, initialSlu
     if (!date) errs.date = "Please choose an event date.";
     if (Object.keys(errs).length > 0) { setFieldErrors(errs); return; }
 
+    const experienceName = selected?.name ?? slug;
+    const tierLabel = tierIndex !== null ? (tiers[tierIndex]?.label ?? "") : "";
+    const customizations = buildNotes();
+
     setSubmitting(true);
     try {
-      const res = await fetch("/api/checkout", {
+      const res = await fetch(site.formspreeEndpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          experienceSlug: slug,
-          tierIndex,
-          date,
+          _subject: `Booking Request — ${experienceName} · ${date}`,
+          _replyto: email,
           name: customerName,
           email,
-          phone,
-          notes: buildNotes(),
+          phone: phone || "Not provided",
+          experience: experienceName,
+          guest_count: tierLabel,
+          event_date: date,
+          customizations: customizations || "No customizations selected",
         }),
       });
-      const result = await res.json().catch(() => ({}));
       if (!res.ok) {
-        if (result.fields) setFieldErrors(result.fields);
-        setError(result.error ?? "Something went wrong. Please try again.");
+        setError("Something went wrong. Please try again or email us directly.");
         setSubmitting(false);
         return;
       }
-      window.location.href = result.url;
+      setSubmitted(true);
     } catch {
       setError("Network error. Please check your connection and try again.");
       setSubmitting(false);
@@ -344,6 +349,35 @@ export default function BookingForm({ depositLabel, minDate, maxDate, initialSlu
         </Link>
         .
       </p>
+    );
+  }
+
+  // ─── Success screen ───────────────────────────────────────────────────────
+
+  if (submitted) {
+    return (
+      <div className="rounded-3xl border border-olive-mist bg-white/60 p-8 text-center sm:p-12">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-olive-mist">
+          <LeafSmall className="h-8 w-8 text-olive" />
+        </div>
+        <h2 className="mt-6 font-display text-3xl text-olive-deep">
+          Request received!
+        </h2>
+        <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-ink-soft">
+          Thank you, <span className="font-semibold text-olive-deep">{customerName}</span>. We have received your booking request and will send you a custom proposal within one business day.
+        </p>
+        <p className="mt-3 text-sm text-ink-soft">
+          A copy has been sent to <span className="font-medium text-ink">{email}</span>.
+        </p>
+        <div className="mt-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-full bg-olive px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-cream transition-all duration-300 hover:bg-olive-deep"
+          >
+            Back to home
+          </Link>
+        </div>
+      </div>
     );
   }
 
@@ -729,7 +763,6 @@ export default function BookingForm({ depositLabel, minDate, maxDate, initialSlu
             </div>
 
             <SubmitArea
-              depositLabel={depositLabel}
               error={error}
               submitting={submitting}
               onBack={goBack}
@@ -845,7 +878,6 @@ export default function BookingForm({ depositLabel, minDate, maxDate, initialSlu
             </div>
 
             <SubmitArea
-              depositLabel={depositLabel}
               error={error}
               submitting={submitting}
               onBack={goBack}
@@ -861,12 +893,10 @@ export default function BookingForm({ depositLabel, minDate, maxDate, initialSlu
 // ─── Submit area sub-component ────────────────────────────────────────────────
 
 function SubmitArea({
-  depositLabel,
   error,
   submitting,
   onBack,
 }: {
-  depositLabel: string;
   error: string | null;
   submitting: boolean;
   onBack: () => void;
@@ -874,10 +904,7 @@ function SubmitArea({
   return (
     <>
       <div className="mt-7 rounded-2xl bg-olive-mist/40 p-5 text-sm text-ink-soft">
-        A{" "}
-        <span className="font-semibold text-olive-deep">{depositLabel}</span>{" "}
-        deposit reserves your date. The balance is settled after we send your custom proposal.
-        Payments are processed securely by Stripe — we never see your card details.
+        We will review your request and send a custom proposal within one business day. No payment is required at this step.
       </div>
 
       {error && (
@@ -893,7 +920,7 @@ function SubmitArea({
           disabled={submitting}
           className="group inline-flex items-center justify-center gap-2 rounded-full bg-olive px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-cream transition-all duration-300 hover:bg-olive-deep disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {submitting ? "Starting checkout…" : `Reserve with ${depositLabel} deposit`}
+          {submitting ? "Sending request…" : "Send booking request"}
           {!submitting && (
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           )}

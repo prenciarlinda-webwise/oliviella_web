@@ -43,13 +43,6 @@ const nextConfig: NextConfig = {
         destination: "/catering-services",
         permanent: true,
       },
-      // Temporary: route all booking traffic to the contact form until
-      // Stripe is configured. Remove once STRIPE_SECRET_KEY is in production.
-      {
-        source: "/book",
-        destination: "/contact",
-        permanent: false,
-      },
       // Canonical redirect for the short URL variant.
       {
         source: "/terms",

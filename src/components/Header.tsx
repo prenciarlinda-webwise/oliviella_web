@@ -95,7 +95,7 @@ export default function Header() {
             {site.phoneDisplay}
           </a>
           <Link
-            href="/contact"
+            href="/book"
             className="rounded-full bg-olive px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-olive-deep"
           >
             Book your event
@@ -188,7 +188,7 @@ export default function Header() {
             </a>
 
             <Link
-              href="/contact"
+              href="/book"
               onClick={() => setOpen(false)}
               className="mt-2 rounded-full bg-olive px-5 py-3 text-center text-sm font-semibold text-cream transition-colors hover:bg-olive-deep"
             >
