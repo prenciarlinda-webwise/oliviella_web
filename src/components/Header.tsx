@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { serviceDropdown, site } from "@/lib/site";
+import { aboutDropdown, serviceDropdown, site } from "@/lib/site";
 import { ChevronDown, CloseIcon, MenuIcon, PhoneIcon } from "./icons";
 
 export default function Header() {
@@ -22,15 +22,24 @@ export default function Header() {
           <Image
             src="/logo-olivella.png"
             alt={site.name}
-            width={2332}
-            height={1339}
+            width={1583}
+            height={770}
             priority
-            className="h-11 w-auto sm:h-12"
+            className="h-24 w-auto"
           />
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden flex-1 items-center justify-center gap-8 md:flex">
+        <div className="hidden flex-1 items-center justify-center gap-7 md:flex">
+          <Link
+            href="/"
+            className={`text-sm font-medium tracking-wide transition-colors ${
+              pathname === "/" ? "text-olive" : "text-ink-soft hover:text-olive"
+            }`}
+          >
+            Home
+          </Link>
+
           {/* Services — hover dropdown */}
           <div className="group relative">
             <Link
@@ -76,6 +85,43 @@ export default function Header() {
           </Link>
 
           <Link
+            href="/faq"
+            className={`text-sm font-medium tracking-wide transition-colors ${
+              pathname === "/faq" ? "text-olive" : "text-ink-soft hover:text-olive"
+            }`}
+          >
+            FAQ
+          </Link>
+
+          {/* About — hover dropdown */}
+          <div className="group relative">
+            <Link
+              href="/about"
+              className={`flex items-center gap-1 text-sm font-medium tracking-wide transition-colors ${
+                pathname.startsWith("/about") || pathname === "/privacy-policy" || pathname === "/terms-and-conditions"
+                  ? "text-olive"
+                  : "text-ink-soft hover:text-olive"
+              }`}
+            >
+              About
+              <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
+            </Link>
+            <div className="pointer-events-none absolute left-1/2 top-full w-60 -translate-x-1/2 pt-2 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100">
+              <div className="overflow-hidden rounded-2xl border border-olive-mist bg-cream/98 py-1.5 shadow-lg shadow-olive-deep/8 ring-1 ring-white/50 backdrop-blur">
+                {aboutDropdown.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block px-4 py-2.5 text-sm text-ink-soft transition-colors hover:bg-olive-mist/50 hover:text-olive-deep"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <Link
             href="/contact"
             className={`text-sm font-medium tracking-wide transition-colors ${
               pathname === "/contact" ? "text-olive" : "text-ink-soft hover:text-olive"
@@ -118,6 +164,18 @@ export default function Header() {
       {open && (
         <div className="border-t border-olive-mist/70 bg-cream/98 md:hidden">
           <div className="flex flex-col px-6 py-4">
+
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className={`rounded-xl px-3 py-3 text-base font-medium transition-colors ${
+                pathname === "/"
+                  ? "bg-olive-mist/70 text-olive-deep"
+                  : "text-ink-soft hover:bg-blush-soft"
+              }`}
+            >
+              Home
+            </Link>
 
             {/* Services accordion */}
             <button
@@ -166,6 +224,43 @@ export default function Header() {
             >
               Areas We Serve
             </Link>
+
+            <Link
+              href="/faq"
+              onClick={() => setOpen(false)}
+              className={`rounded-xl px-3 py-3 text-base font-medium transition-colors ${
+                pathname === "/faq"
+                  ? "bg-olive-mist/70 text-olive-deep"
+                  : "text-ink-soft hover:bg-blush-soft"
+              }`}
+            >
+              FAQ
+            </Link>
+
+            <Link
+              href="/about"
+              onClick={() => setOpen(false)}
+              className={`rounded-xl px-3 py-3 text-base font-medium transition-colors ${
+                pathname === "/about"
+                  ? "bg-olive-mist/70 text-olive-deep"
+                  : "text-ink-soft hover:bg-blush-soft"
+              }`}
+            >
+              About Us
+            </Link>
+
+            <div className="ml-3 space-y-0.5">
+              {aboutDropdown.slice(1).map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-xl px-3 py-2 text-sm text-ink-soft hover:bg-olive-mist/50 hover:text-olive-deep"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
 
             <Link
               href="/contact"

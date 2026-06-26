@@ -13,7 +13,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact for a Miami Charcuterie or Flower Cart Quote",
   description:
-    "Contact Olivella for a charcuterie or flower cart rental quote in Miami and South Florida. Tell us about your event and we reply within one business day.",
+    "Contact Olivella for a charcuterie or flower cart quote in Miami and South Florida. Tell us about your event and we reply within one business day.",
   alternates: { canonical: "/contact" },
 };
 
@@ -103,7 +103,7 @@ export default function ContactPage() {
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-ink-soft">
             Tell us about your event and we will send ideas and a quote for your
-            charcuterie or flower cart rental. We usually reply
+            charcuterie or flower cart. We usually reply
             within one business day.
           </p>
         </div>

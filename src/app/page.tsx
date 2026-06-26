@@ -29,9 +29,9 @@ const products = [
   },
   {
     image: "/images/flower-cart-miami.jpeg",
-    alt: "Flower cart rental styled for a Miami event",
-    name: "Flower cart rental",
-    copy: "A vintage flower cart your guests pick fresh stems from and take home as a favor, a popular wedding and bridal shower rental across South Florida.",
+    alt: "Flower cart styled for a Miami event",
+    name: "Flower cart experience",
+    copy: "A vintage flower cart your guests pick fresh stems from and take home as a keepsake, a popular wedding and bridal shower experience across South Florida.",
     tone: "from-blush-soft to-cream",
   },
 ];
@@ -64,59 +64,35 @@ export default function HomePage() {
       <MatchTicker />
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(60% 50% at 80% 0%, rgba(241,207,211,0.45) 0%, rgba(250,246,238,0) 60%), radial-gradient(50% 50% at 10% 90%, rgba(231,233,214,0.7) 0%, rgba(250,246,238,0) 60%)",
-          }}
+      <section className="relative w-full">
+        <Image
+          src="/images/hero-image.jpeg"
+          alt="Olivella food and flower cart experience at a Miami event"
+          width={1536}
+          height={1024}
+          priority
+          className="w-full h-auto block"
         />
-        <Container className="relative grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-2 lg:py-32">
-          <div className="rise">
-            <h1 className="text-balance text-5xl text-olive-deep sm:text-6xl lg:text-7xl">
+        <div className="absolute inset-0 flex items-center justify-center bg-olive-deep/55">
+          <Container className="rise text-center">
+            <h1 className="text-balance text-5xl text-cream sm:text-6xl lg:text-7xl">
               Food &amp; Flower Cart in Miami
             </h1>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-cream/85">
               {site.name} designs Mediterranean charcuterie carts and
-              pick-your-own flower cart rentals for weddings, bridal showers
-              and parties
-              across Miami and South Florida, beautiful to look at and even
-              better to share.
+              pick-your-own flower carts for weddings, bridal showers and
+              parties across Miami and South Florida.
             </p>
-            <div className="mt-9 flex flex-wrap gap-4">
+            <div className="mt-9 flex flex-wrap justify-center gap-4">
               <Button href="/catering-services" withArrow>
                 See our experiences
               </Button>
-              <Button href="/contact" variant="secondary">
+              <Button href="/contact" variant="light">
                 Get a Miami event quote
               </Button>
             </div>
-          </div>
-
-          {/* Hero photos */}
-          <div className="rise relative mx-auto hidden h-[28rem] w-full max-w-md lg:block">
-            <div className="absolute right-0 top-0 h-72 w-60 rotate-[4deg] overflow-hidden rounded-[2rem] shadow-lg shadow-rose/10 ring-1 ring-white/60">
-              <Image
-                src="/images/flower-cart-events.jpeg"
-                alt="Flower cart set up at a Miami event"
-                fill
-                sizes="320px"
-                className="object-cover"
-              />
-            </div>
-            <div className="absolute bottom-0 left-0 h-64 w-64 rotate-[-4deg] overflow-hidden rounded-[2rem] shadow-lg shadow-olive/10 ring-1 ring-white/60">
-              <Image
-                src="/images/food-and-flower-cart.jpeg"
-                alt="Olivella food and flower cart at a Miami event"
-                fill
-                sizes="320px"
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </Container>
+          </Container>
+        </div>
       </section>
 
       {/* Game-day promo ribbon (bottom) */}
@@ -127,13 +103,14 @@ export default function HomePage() {
         <Container>
           <div className="overflow-hidden rounded-[2.5rem] border-t-4 border-marigold bg-olive-deep ring-1 ring-white/10">
             <div className="grid items-stretch lg:grid-cols-2">
-              <div className="relative h-64 w-full sm:h-80 lg:h-full lg:min-h-[30rem]">
+              <div className="relative">
                 <Image
                   src="/images/event-planning-miami.jpeg"
                   alt="Event planning setup in Miami styled for a World Cup watch party"
-                  fill
+                  width={1024}
+                  height={1536}
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
+                  className="w-full h-auto"
                 />
                 <div
                   aria-hidden
@@ -183,13 +160,13 @@ export default function HomePage() {
       {/* Intro */}
       <section className="py-20 sm:py-24">
         <Container className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
-          <div className="relative h-72 overflow-hidden rounded-[2.5rem] bg-olive-mist ring-1 ring-white/60">
+          <div>
             <Image
               src="/images/get-to-know-olivella.jpeg"
               alt="Olivella styled event setup with charcuterie and flowers"
-              fill
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="object-cover transition-opacity duration-300"
+              width={1536}
+              height={1024}
+              className="w-full h-auto"
             />
           </div>
           <div>
@@ -201,7 +178,7 @@ export default function HomePage() {
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-ink-soft">
               {site.name} is a Miami event styling studio specializing in
-              Mediterranean charcuterie carts and flower cart rentals. We build
+              Mediterranean charcuterie carts and flower carts. We build
               every charcuterie spread by hand and fill each flower cart fresh
               that morning for bridal showers, birthdays, baby showers, corporate
               events and intimate weddings across {site.serviceArea}.
@@ -216,13 +193,14 @@ export default function HomePage() {
       </section>
 
       {/* Full-width floral showcase */}
-      <section className="relative h-80 w-full overflow-hidden bg-olive-mist sm:h-[28rem]">
+      <section className="relative w-full">
         <Image
           src="/images/floral-setup-events.jpeg"
           alt="Full floral event setup styled by Olivella in Miami"
-          fill
+          width={1254}
+          height={1254}
           sizes="100vw"
-          className="object-cover transition-opacity duration-300"
+          className="w-full h-auto"
         />
         <div
           aria-hidden
@@ -241,7 +219,7 @@ export default function HomePage() {
               Our services
             </span>
             <h2 className="mt-4 text-4xl text-olive-deep sm:text-5xl">
-              Charcuterie carts and flower cart rental
+              Charcuterie carts and flower cart experiences
             </h2>
             <p className="mt-4 text-lg text-ink-soft">
               Book one service for your Miami event or pair them together.
@@ -254,13 +232,14 @@ export default function HomePage() {
                 key={product.name}
                 className={`group overflow-hidden rounded-[2rem] bg-gradient-to-br ${product.tone} ring-1 ring-white/60 transition-shadow hover:shadow-xl hover:shadow-olive/10`}
               >
-                <div className="relative h-56 overflow-hidden bg-olive-mist/40">
+                <div>
                   <Image
                     src={product.image}
                     alt={product.alt}
-                    fill
+                    width={1023}
+                    height={1537}
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-8 sm:p-10">

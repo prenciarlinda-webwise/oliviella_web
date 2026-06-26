@@ -88,18 +88,15 @@ function ExperienceSection({
     >
       <Container className="grid items-start gap-12 lg:grid-cols-2">
         {/* Image */}
-        <div
-          className={`relative h-80 overflow-hidden rounded-[2.5rem] ring-1 ring-white/60 lg:h-full lg:min-h-[26rem] ${
-            experience.accent === "rose" ? "bg-blush-soft" : "bg-olive-mist"
-          } ${flip ? "lg:order-2" : ""}`}
-        >
+        <div className={flip ? "lg:order-2" : ""}>
           <Image
             src={experience.image}
             alt={experience.alt}
-            fill
+            width={1402}
+            height={1122}
             priority={index === 0}
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover transition-opacity duration-300"
+            className="w-full h-auto"
           />
         </div>
 

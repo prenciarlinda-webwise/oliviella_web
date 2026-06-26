@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { navLinks, site } from "@/lib/site";
 import NewsletterForm from "./NewsletterForm";
 import {
-  OliveSprig,
   MailIcon,
   PhoneIcon,
   InstagramIcon,
@@ -29,12 +29,15 @@ export default function Footer() {
 
         <div className="grid gap-12 pt-12 md:grid-cols-3">
           <div className="max-w-xs">
-          <div className="flex items-center gap-2">
-            <OliveSprig className="h-7 w-7 text-blush" />
-            <span className="font-display text-2xl text-cream">{site.name}</span>
-          </div>
+          <Image
+            src="/logo-olivella-white.png"
+            alt={site.name}
+            width={1583}
+            height={770}
+            className="h-24 w-auto"
+          />
           <p className="mt-4 text-sm leading-relaxed text-cream/70">
-            Charcuterie carts and pick-your-own flower cart rentals for
+            Charcuterie carts and pick-your-own flower carts for
             weddings, showers and parties across {site.serviceArea}.
           </p>
         </div>

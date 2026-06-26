@@ -44,7 +44,7 @@ export const experiences: Experience[] = [
     description:
       "A luxury flower cart experience where guests receive hand-wrapped bouquets curated with premium seasonal blooms and signature Olivella styling. Designed to feel elegant, interactive, and unforgettable.",
     image: "/images/flower-card-florida.jpeg",
-    alt: "Luxury flower cart rental styled for a South Florida event",
+    alt: "Luxury flower cart experience styled for a South Florida event",
     tone: "from-blush-soft to-cream",
     accent: "rose",
     includes: [
@@ -134,35 +134,6 @@ export const experiences: Experience[] = [
     },
     bookable: true,
   },
-  {
-    slug: "riviera-bouquet-bar",
-    name: "The Riviera Bouquet Bar",
-    subtitle: "Individual Bouquet Experience",
-    description:
-      "A smaller-scale floral experience perfect for guest favors, intimate gatherings, pop-ups, and luxury gifting. Guests can select blooms and receive hand-wrapped bouquets styled in the Olivella aesthetic.",
-    image: "/images/flower-setup.jpeg",
-    alt: "Riviera Bouquet Bar with hand-wrapped individual bouquets styled by Olivella",
-    tone: "from-blush-soft to-cream",
-    accent: "rose",
-    includes: [
-      "Hand-wrapped individual bouquets",
-      "Premium seasonal blooms",
-      "Signature wrapping paper & ribbon",
-      "Bouquet styling station",
-      "Personalized packaging",
-    ],
-    pricing: {
-      kind: "bouquets",
-      tiers: [
-        { label: "Mini Wrap", price: "Starting at $18" },
-        { label: "Signature Wrap", price: "Starting at $28" },
-        { label: "Riviera Bouquet", price: "Starting at $42" },
-        { label: "Garden Luxe Bouquet", price: "Starting at $65+" },
-      ],
-      note: "Minimums may apply for events.",
-    },
-    bookable: false,
-  },
 ];
 
 export const addOns: string[] = [
@@ -189,8 +160,7 @@ export function getExperience(slug: string): Experience | undefined {
 // `booking.ts` module — never trust anything price-related from the client.
 
 /**
- * Slugs that can be reserved online with a deposit. The Riviera Bouquet Bar
- * is quote-only (per-item pricing) so it is excluded.
+ * Slugs that can be reserved online with a deposit.
  */
 export const BOOKABLE_SLUGS = [
   "flower-cart-miami",

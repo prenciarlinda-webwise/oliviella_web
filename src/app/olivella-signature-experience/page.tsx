@@ -53,14 +53,15 @@ export default function OlivellaSignatureExperiencePage() {
       {/* Experience detail */}
       <section className="py-16 sm:py-20">
         <Container className="grid items-start gap-12 lg:grid-cols-2">
-          <div className="relative h-80 overflow-hidden rounded-[2.5rem] bg-blush-soft ring-1 ring-white/60 lg:h-full lg:min-h-[26rem]">
+          <div>
             <Image
               src={experience.image}
               alt={experience.alt}
-              fill
+              width={1024}
+              height={1536}
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover transition-opacity duration-300"
+              className="w-full h-auto"
             />
           </div>
 

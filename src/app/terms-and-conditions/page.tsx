@@ -38,9 +38,9 @@ export default function TermsPage() {
           <h2>1. Services</h2>
           <p>
             {site.name} provides luxury event experiences including but not
-            limited to: flower cart rentals, Mediterranean grazing cart rentals,
-            the Olivella Signature Experience, and individual bouquet bar
-            services for events across {site.serviceArea}. All pricing listed on
+            limited to: flower cart experiences, Mediterranean grazing cart
+            experiences, the Olivella Signature Experience, and individual
+            bouquet services for events across {site.serviceArea}. All pricing listed on
             this website is a &ldquo;starting at&rdquo; figure; final pricing is
             confirmed in your customized proposal.
           </p>

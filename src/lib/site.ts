@@ -2,9 +2,9 @@
 // Update these as the real branding and contact info come in.
 export const site = {
   name: "Olivella",
-  tagline: "Charcuterie carts and flower cart rental in Miami",
+  tagline: "Charcuterie carts and flower cart in Miami",
   description:
-    "Olivella designs Mediterranean charcuterie carts and pick-your-own flower cart rentals for weddings, bridal showers and parties across Miami and South Florida.",
+    "Olivella designs Mediterranean charcuterie carts and pick-your-own flower carts for weddings, bridal showers and parties across Miami and South Florida.",
 
   url: "https://www.olivellamiami.com",
 
@@ -12,8 +12,8 @@ export const site = {
   phoneDisplay: "(786) 557-1878",
   phoneHref: "+17865571878",
 
-  instagramHandle: "olivella",
-  instagramUrl: "https://instagram.com/olivella",
+  instagramHandle: "olivellamiami",
+  instagramUrl: "https://instagram.com/olivellamiami",
 
   city: "Miami",
   region: "FL",
@@ -26,6 +26,9 @@ export const site = {
 
 export const navLinks = [
   { href: "/catering-services", label: "Services" },
+  { href: "/locations", label: "Areas We Serve" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact Us" },
 ] as const;
 
@@ -33,5 +36,9 @@ export const serviceDropdown = [
   { href: "/flower-cart-miami", label: "Flower Cart Miami" },
   { href: "/food-cart-miami", label: "Food Cart Miami" },
   { href: "/olivella-signature-experience", label: "The Olivella Signature Experience" },
-  { href: "/riviera-bouquet-bar", label: "Bouquet Bar" },
+] as const;
+
+export const aboutDropdown = [
+  { href: "/privacy-policy", label: "Privacy Policy" },
+  { href: "/terms-and-conditions", label: "Terms & Conditions" },
 ] as const;

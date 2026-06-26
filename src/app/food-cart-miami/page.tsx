@@ -7,9 +7,9 @@ import { getExperience } from "@/lib/products";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Food Cart Miami | Mediterranean Grazing Cart Rental",
+  title: "Food Cart Miami | Mediterranean Grazing Cart Experience",
   description:
-    "Rent a luxury Mediterranean grazing cart in Miami for weddings, corporate events, bridal showers and parties. Premium imported cheeses, charcuterie and seasonal accompaniments styled by Olivella across South Florida.",
+    "Book a luxury Mediterranean grazing cart in Miami for weddings, corporate events, bridal showers and parties. Premium imported cheeses, charcuterie and seasonal accompaniments styled by Olivella across South Florida.",
   alternates: { canonical: "/food-cart-miami" },
 };
 
@@ -47,7 +47,7 @@ export default function FoodCartMiamiPage() {
             Food Cart Miami
           </span>
           <h1 className="mx-auto mt-5 max-w-3xl text-balance text-5xl text-olive-deep sm:text-6xl">
-            Mediterranean grazing cart rental in Miami
+            Mediterranean grazing cart experience in Miami
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
             An elevated grazing cart featuring premium imported cheeses, artisanal
@@ -68,14 +68,15 @@ export default function FoodCartMiamiPage() {
       {/* Main experience */}
       <section className="py-16 sm:py-20">
         <Container className="grid items-start gap-12 lg:grid-cols-2">
-          <div className="relative h-80 overflow-hidden rounded-[2.5rem] bg-olive-mist ring-1 ring-white/60 lg:h-full lg:min-h-[26rem]">
+          <div>
             <Image
               src={cart.image}
               alt={cart.alt}
-              fill
+              width={1023}
+              height={1537}
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover transition-opacity duration-300"
+              className="w-full h-auto"
             />
           </div>
 
