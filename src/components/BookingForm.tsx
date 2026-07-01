@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+
+declare global {
+  interface Window {
+    dataLayer: Record<string, unknown>[];
+  }
+}
 import Link from "next/link";
 import { getBookableExperiences, isPayableTier } from "@/lib/products";
 import { site } from "@/lib/site";
@@ -331,6 +337,13 @@ export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
         setSubmitting(false);
         return;
       }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "booking_request_sent",
+        experience_name: experienceName,
+        guest_tier: tierLabel,
+        event_date: date,
+      });
       setSubmitted(true);
     } catch {
       setError("Network error. Please check your connection and try again.");

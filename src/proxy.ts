@@ -18,9 +18,10 @@ export function proxy(request: NextRequest) {
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""};
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data:;
+    img-src 'self' blob: data: https://www.google-analytics.com https://www.googletagmanager.com;
     font-src 'self';
-    connect-src 'self' https://formspree.io;
+    connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net;
+    frame-src https://www.googletagmanager.com;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
