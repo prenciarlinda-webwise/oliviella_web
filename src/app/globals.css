@@ -19,10 +19,6 @@
   --color-blush: #f1cfd3;
   --color-blush-soft: #fbecee;
   --color-rose: #d7989d;
-
-  /* Game-day ribbon (yellow / orange) */
-  --color-marigold: #f6a609;
-  --color-marigold-bright: #ffc233;
 }
 
 @theme inline {
@@ -78,41 +74,4 @@
 
 .rise {
   animation: olivella-rise 0.7s ease both;
-}
-
-/* Continuously scrolling game-day promo ribbon (marquee). The track holds two
-   identical groups and slides by -50% so the loop is seamless. */
-@keyframes olivella-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.marquee {
-  overflow: hidden;
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  flex-wrap: nowrap;
-  animation: olivella-marquee 28s linear infinite;
-}
-
-.marquee-track--reverse {
-  animation-direction: reverse;
-}
-
-/* Let visitors stop the scroll to read it. */
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-  }
 }

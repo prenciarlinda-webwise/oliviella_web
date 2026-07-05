@@ -20,8 +20,8 @@ export default function Footer() {
           <div className="max-w-md">
             <h4 className="font-display text-2xl text-cream">Stay in the loop</h4>
             <p className="mt-2 text-sm text-cream/70">
-              Seasonal menus, new flower carts and game-day dates, straight to
-              your inbox.
+              Seasonal menus and new flower cart dates, straight to your
+              inbox.
             </p>
           </div>
           <NewsletterForm />

@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
-import MatchTicker from "@/components/MatchTicker";
 import {
   OliveSprig,
   FlowerBloom,
   LeafSmall,
   Quote,
   ArrowRight,
-  SoccerBall,
 } from "@/components/icons";
 import { site } from "@/lib/site";
 
@@ -26,13 +24,17 @@ const products = [
     name: "Charcuterie carts and boards",
     copy: "Charcuterie carts and boards loaded with seasonal cheeses, cured meats, honey, fresh fruit and warm bread, styled to anchor your Miami event.",
     tone: "from-olive-mist to-cream",
+    width: 1023,
+    height: 1537,
   },
   {
-    image: "/images/flower-cart-miami.jpeg",
+    image: "/images/flower-cart.jpeg",
     alt: "Flower cart styled for a Miami event",
     name: "Flower cart experience",
     copy: "A vintage flower cart your guests pick fresh stems from and take home as a keepsake, a popular wedding and bridal shower experience across South Florida.",
     tone: "from-blush-soft to-cream",
+    width: 1448,
+    height: 1086,
   },
 ];
 
@@ -51,25 +53,16 @@ const features = [
   },
 ];
 
-const gameDayPoints = [
-  "Delivered and styled before kickoff, so you never miss a goal.",
-  "Boards and carts that feed your whole crew, from a few friends to a full house.",
-  "Customized in your team's colors on request.",
-];
-
 export default function HomePage() {
   return (
     <>
-      {/* Game-day promo ribbon (top) */}
-      <MatchTicker />
-
       {/* Hero */}
       <section className="relative w-full">
         <Image
-          src="/images/hero-image.jpeg"
+          src="/images/food-and-flower-cart.jpeg"
           alt="Olivella food and flower cart experience at a Miami event"
-          width={1536}
-          height={1024}
+          width={1402}
+          height={1122}
           priority
           className="w-full h-auto block"
         />
@@ -95,75 +88,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Game-day promo ribbon (bottom) */}
-      <MatchTicker reverse />
-
-      {/* Game day */}
-      <section id="game-day" className="scroll-mt-24 py-20 sm:py-24">
-        <Container>
-          <div className="overflow-hidden rounded-[2.5rem] border-t-4 border-marigold bg-olive-deep ring-1 ring-white/10">
-            <div className="grid items-stretch lg:grid-cols-2">
-              <div className="relative">
-                <Image
-                  src="/images/event-planning-miami.jpeg"
-                  alt="Event planning setup in Miami styled for a World Cup watch party"
-                  width={1024}
-                  height={1536}
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="w-full h-auto"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-gradient-to-t from-olive-deep via-olive-deep/30 to-transparent lg:bg-gradient-to-r"
-                />
-              </div>
-              <div className="p-8 text-cream sm:p-12">
-                <span className="inline-flex items-center gap-2 rounded-full bg-marigold px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-olive-deep">
-                  <SoccerBall className="h-4 w-4" />
-                  Matchday menu &middot; June 11&ndash;July 19
-                </span>
-                <h2 className="mt-5 font-body text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-cream sm:text-5xl">
-                  Charcuterie for the{" "}
-                  <span className="text-marigold-bright">big matches</span>
-                </h2>
-                <p className="mt-5 max-w-md text-lg leading-relaxed text-cream/80">
-                  From the June 11 kickoff to the final, the world&apos;s biggest
-                  matches roll through Miami. {site.name} delivers game-day
-                  charcuterie carts and boards across {site.serviceArea}, set up
-                  before kickoff so you never miss a goal.
-                </p>
-                <ul className="mt-7 space-y-3.5">
-                  {gameDayPoints.map((point) => (
-                    <li
-                      key={point}
-                      className="flex items-start gap-3 text-cream/90"
-                    >
-                      <SoccerBall className="mt-0.5 h-5 w-5 shrink-0 text-marigold" />
-                      <span className="font-semibold">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3">
-                  <Button href="/contact" variant="accent" withArrow>
-                    Reserve your game-day spread
-                  </Button>
-                  <span className="text-sm font-medium text-blush">
-                    Add a flower cart to match your team colors.
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
       {/* Intro */}
       <section className="py-20 sm:py-24">
         <Container className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
           <div>
             <Image
-              src="/images/get-to-know-olivella.jpeg"
-              alt="Olivella styled event setup with charcuterie and flowers"
+              src="/images/flower-setup.jpeg"
+              alt="Olivella flowers and graze cart experience, beautifully curated"
               width={1536}
               height={1024}
               className="w-full h-auto"
@@ -195,10 +126,10 @@ export default function HomePage() {
       {/* Full-width floral showcase */}
       <section className="relative w-full">
         <Image
-          src="/images/floral-setup-events.jpeg"
+          src="/images/flower-cart-events.jpeg"
           alt="Full floral event setup styled by Olivella in Miami"
-          width={1254}
-          height={1254}
+          width={1448}
+          height={1086}
           sizes="100vw"
           className="w-full h-auto"
         />
@@ -236,8 +167,8 @@ export default function HomePage() {
                   <Image
                     src={product.image}
                     alt={product.alt}
-                    width={1023}
-                    height={1537}
+                    width={product.width}
+                    height={product.height}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
                   />
@@ -316,7 +247,7 @@ export default function HomePage() {
               day.
             </p>
             <div className="mt-8 flex justify-center">
-              <Button href="/contact" withArrow>
+              <Button href="/contact" variant="secondary" withArrow>
                 Get in touch
               </Button>
             </div>

@@ -2,15 +2,13 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight } from "./icons";
 
-type Variant = "primary" | "secondary" | "light" | "accent";
+type Variant = "primary" | "secondary" | "light";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-olive text-cream hover:bg-olive-deep shadow-sm shadow-olive/20",
+  primary: "bg-rose text-olive-deep hover:bg-blush shadow-sm shadow-rose/30",
   secondary:
-    "border border-olive/30 text-olive-deep hover:border-olive hover:bg-olive-mist/60",
+    "border border-rose/40 text-olive-deep hover:border-rose hover:bg-blush-soft/60",
   light: "bg-cream text-olive-deep hover:bg-blush-soft",
-  accent:
-    "bg-marigold text-olive-deep hover:bg-marigold-bright shadow-sm shadow-marigold/30",
 };
 
 export default function Button({

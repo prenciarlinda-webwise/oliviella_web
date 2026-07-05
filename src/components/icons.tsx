@@ -143,29 +143,6 @@ export function InstagramIcon(props: IconProps) {
   );
 }
 
-export function SoccerBall(props: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.4}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      {...props}
-    >
-      <circle cx="12" cy="12" r="9.3" />
-      <path
-        d="M12 8.2 9.4 10.1l1 3.1h3.2l1-3.1L12 8.2Z"
-        fill="currentColor"
-        stroke="none"
-      />
-      <path d="M12 8.2V3.3M9.4 10.1 5 8.6M14.6 10.1 19 8.6M10.4 13.2 8.7 17.8M13.6 13.2l1.7 4.6" />
-    </svg>
-  );
-}
-
 export function ChevronDown(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>

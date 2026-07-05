@@ -254,18 +254,18 @@ export default function CateringServicesPage() {
       {/* CTA */}
       <section className="py-20 sm:py-24">
         <Container>
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-olive px-8 py-16 text-center text-cream ring-1 ring-white/10 sm:px-16">
-            <OliveSprig className="absolute -left-6 -top-6 h-32 w-32 text-cream/15" />
-            <FlowerBloom className="absolute -bottom-6 -right-6 h-32 w-32 text-blush/40" />
-            <h2 className="text-4xl text-cream sm:text-5xl">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-blush via-blush-soft to-olive-mist px-8 py-16 text-center ring-1 ring-white/60 sm:px-16">
+            <OliveSprig className="absolute -left-6 -top-6 h-32 w-32 text-olive/20" />
+            <FlowerBloom className="absolute -bottom-6 -right-6 h-32 w-32 text-rose/30" />
+            <h2 className="text-4xl text-olive-deep sm:text-5xl">
               Reserve your Olivella experience
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-cream/80">
+            <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
               Tell us your date and guest count, and we will send a curated
               proposal for your celebration in {site.serviceArea}.
             </p>
             <div className="mt-8 flex justify-center">
-              <Button href="/book" variant="light" withArrow>
+              <Button href="/book" variant="secondary" withArrow>
                 Check your date
               </Button>
             </div>

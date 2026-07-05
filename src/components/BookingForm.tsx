@@ -165,9 +165,9 @@ const inputCls =
   "w-full rounded-2xl border border-olive-mist bg-white/70 px-4 py-3 text-ink placeholder:text-ink-soft/50 outline-none transition focus:border-olive focus:ring-2 focus:ring-olive/20";
 const labelCls = "mb-1.5 block text-sm font-semibold text-olive-deep";
 const backBtnCls =
-  "rounded-full border border-olive/30 px-7 py-3.5 text-sm font-semibold text-olive-deep transition-all duration-300 hover:border-olive hover:bg-olive-mist/60";
+  "rounded-full border border-rose/40 px-7 py-3.5 text-sm font-semibold text-olive-deep transition-all duration-300 hover:border-rose hover:bg-blush-soft/60";
 const nextBtnCls =
-  "inline-flex items-center justify-center gap-2 rounded-full bg-olive px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-cream transition-all duration-300 hover:bg-olive-deep";
+  "inline-flex items-center justify-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -385,7 +385,7 @@ export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
         <div className="mt-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full bg-olive px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-cream transition-all duration-300 hover:bg-olive-deep"
+            className="inline-flex items-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush"
           >
             Back to home
           </Link>
@@ -931,7 +931,7 @@ function SubmitArea({
         <button
           type="submit"
           disabled={submitting}
-          className="group inline-flex items-center justify-center gap-2 rounded-full bg-olive px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-cream transition-all duration-300 hover:bg-olive-deep disabled:cursor-not-allowed disabled:opacity-60"
+          className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? "Sending request…" : "Send booking request"}
           {!submitting && (

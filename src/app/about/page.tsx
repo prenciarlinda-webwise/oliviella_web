@@ -77,8 +77,8 @@ export default function AboutPage() {
         <Container className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">
           <div>
             <Image
-              src="/images/get-to-know-olivella.jpeg"
-              alt="Olivella styled event setup with charcuterie and flowers"
+              src="/images/flower-setup.jpeg"
+              alt="Olivella flowers and graze cart experience, beautifully curated"
               width={1536}
               height={1024}
               sizes="(max-width: 1024px) 100vw, 45vw"
@@ -117,10 +117,10 @@ export default function AboutPage() {
       {/* Full-width image break */}
       <section className="relative w-full">
         <Image
-          src="/images/floral-setup-events.jpeg"
+          src="/images/flower-cart-events.jpeg"
           alt="Full floral event setup styled by Olivella in Miami"
-          width={1920}
-          height={1080}
+          width={1448}
+          height={1086}
           className="w-full h-auto block"
         />
         <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-olive-deep/60 via-transparent to-transparent pb-10">
