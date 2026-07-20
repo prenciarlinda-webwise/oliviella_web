@@ -24,8 +24,7 @@ const products = [
     name: "Charcuterie carts and boards",
     copy: "Charcuterie carts and boards loaded with seasonal cheeses, cured meats, honey, fresh fruit and warm bread, styled to anchor your Miami event.",
     tone: "from-olive-mist to-cream",
-    width: 1023,
-    height: 1537,
+    imagePosition: "object-bottom",
   },
   {
     image: "/images/flower-cart.jpeg",
@@ -33,8 +32,7 @@ const products = [
     name: "Flower cart experience",
     copy: "A vintage flower cart your guests pick fresh stems from and take home as a keepsake, a popular wedding and bridal shower experience across South Florida.",
     tone: "from-blush-soft to-cream",
-    width: 1448,
-    height: 1086,
+    imagePosition: "object-center",
   },
 ];
 
@@ -163,14 +161,13 @@ export default function HomePage() {
                 key={product.name}
                 className={`group overflow-hidden rounded-[2rem] bg-gradient-to-br ${product.tone} ring-1 ring-white/60 transition-shadow hover:shadow-xl hover:shadow-olive/10`}
               >
-                <div>
+                <div className="relative aspect-square">
                   <Image
                     src={product.image}
                     alt={product.alt}
-                    width={product.width}
-                    height={product.height}
+                    fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
+                    className={`object-cover ${product.imagePosition} transition-transform duration-500 group-hover:scale-105`}
                   />
                 </div>
                 <div className="p-8 sm:p-10">
