@@ -52,29 +52,25 @@ export async function POST(req: NextRequest) {
   }
   processed.add(event.id);
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-
-    // Only act on actually-paid sessions.
-    if (session.payment_status === "paid") {
-      const m = session.metadata ?? {};
-      await sendOrderNotification({
-        experienceName: m.experienceName ?? "Unknown experience",
-        tierLabel: m.tierLabel ?? "—",
-        eventDate: m.eventDate ?? "—",
-        depositFormatted: formatDeposit(),
-        customerName: m.customerName ?? session.customer_details?.name ?? "—",
-        customerEmail:
-          m.customerEmail ?? session.customer_details?.email ?? "—",
-        customerPhone: m.customerPhone ?? "",
-        notes: m.notes ?? "",
-        stripeSessionId: session.id,
-        amountPaidFormatted: formatMoney(
-          session.amount_total ?? 0,
-          session.currency ?? "usd",
-        ),
-      });
-    }
+  // Deposits use manual capture (see /api/checkout), so the moment a booking
+  // request is actually ready to review is when the authorization succeeds —
+  // not "checkout.session.completed", whose payment_status stays "unpaid"
+  // until someone captures it from the Stripe Dashboard.
+  if (event.type === "payment_intent.amount_capturable_updated") {
+    const intent = event.data.object as Stripe.PaymentIntent;
+    const m = intent.metadata ?? {};
+    await sendOrderNotification({
+      experienceName: m.experienceName ?? "Unknown experience",
+      tierLabel: m.tierLabel ?? "—",
+      eventDate: m.eventDate ?? "—",
+      depositFormatted: formatDeposit(),
+      customerName: m.customerName ?? "—",
+      customerEmail: m.customerEmail ?? "—",
+      customerPhone: m.customerPhone ?? "",
+      notes: m.notes ?? "",
+      stripeId: intent.id,
+      amountFormatted: formatMoney(intent.amount_capturable, intent.currency),
+    });
   }
 
   // Always 200 on a verified event so Stripe stops retrying.

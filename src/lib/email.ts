@@ -17,8 +17,8 @@ export type OrderNotification = {
   customerEmail: string;
   customerPhone: string;
   notes: string;
-  stripeSessionId: string;
-  amountPaidFormatted: string;
+  stripeId: string;
+  amountFormatted: string;
 };
 
 function escapeHtml(s: string): string {
@@ -39,27 +39,34 @@ export async function sendOrderNotification(
   if (!apiKey || !to || !from) {
     console.warn(
       "[email] Skipping order notification — RESEND_API_KEY / ORDER_NOTIFICATION_EMAIL / ORDER_FROM_EMAIL not all set.",
-      { stripeSessionId: order.stripeSessionId },
+      { stripeId: order.stripeId },
     );
     return false;
   }
 
-  const subject = `New booking: ${order.experienceName} — ${order.eventDate}`;
+  const subject = `Booking request — confirm to capture: ${order.experienceName} — ${order.eventDate}`;
 
   const rows: [string, string][] = [
     ["Experience", order.experienceName],
     ["Guest tier", order.tierLabel],
     ["Event date", order.eventDate],
-    ["Deposit paid", `${order.amountPaidFormatted} (of ${order.depositFormatted})`],
+    [
+      "Deposit authorized",
+      `${order.amountFormatted} (of ${order.depositFormatted}) — held, not yet captured`,
+    ],
     ["Name", order.customerName],
     ["Email", order.customerEmail],
     ["Phone", order.customerPhone || "—"],
     ["Notes", order.notes || "—"],
-    ["Stripe session", order.stripeSessionId],
+    ["Stripe reference", order.stripeId],
   ];
 
-  const text = rows.map(([k, v]) => `${k}: ${v}`).join("\n");
-  const html = `<h2>New Olivella booking</h2><table cellpadding="6" style="border-collapse:collapse">${rows
+  const text = [
+    ...rows.map(([k, v]) => `${k}: ${v}`),
+    "",
+    "Confirm availability, then capture the payment in the Stripe Dashboard to charge the deposit and finalize this booking.",
+  ].join("\n");
+  const html = `<h2>New Olivella booking request</h2><p>Confirm availability, then capture the payment in the Stripe Dashboard to charge the deposit and finalize this booking.</p><table cellpadding="6" style="border-collapse:collapse">${rows
     .map(
       ([k, v]) =>
         `<tr><td style="font-weight:600;color:#5b6236">${escapeHtml(

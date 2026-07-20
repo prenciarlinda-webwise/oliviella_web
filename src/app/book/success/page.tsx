@@ -14,8 +14,20 @@ async function getSummary(sessionId: string | undefined) {
   if (!sessionId || !isStripeConfigured()) return null;
   try {
     // Re-verify the session server-side; never trust the redirect alone.
-    const session = await getStripe().checkout.sessions.retrieve(sessionId);
-    if (session.payment_status !== "paid") return null;
+    const session = await getStripe().checkout.sessions.retrieve(sessionId, {
+      expand: ["payment_intent"],
+    });
+    // Deposits use manual capture (see /api/checkout), so a successful
+    // reservation lands the PaymentIntent in "requires_capture" (authorized,
+    // held) rather than session.payment_status "paid" — that only flips once
+    // the deposit is captured after confirmation.
+    const intentStatus =
+      typeof session.payment_intent === "string"
+        ? undefined
+        : session.payment_intent?.status;
+    if (intentStatus !== "requires_capture" && intentStatus !== "succeeded") {
+      return null;
+    }
     return {
       name: session.metadata?.customerName ?? "",
       experience: session.metadata?.experienceName ?? "",
@@ -44,7 +56,8 @@ export default async function BookingSuccessPage({
           Thank you{summary?.name ? `, ${summary.name}` : ""}!
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-ink-soft">
-          Your deposit is confirmed and your date is reserved
+          We&apos;ve received your booking request and your card is
+          authorized for the deposit
           {summary?.experience ? (
             <>
               {" "}
@@ -57,8 +70,9 @@ export default async function BookingSuccessPage({
               on <span className="font-semibold">{summary.date}</span>
             </>
           ) : null}
-          . We&apos;ll be in touch shortly with your custom proposal. A receipt
-          is on its way to your email.
+          . We&apos;ll confirm availability and follow up shortly with your
+          custom proposal — the deposit is charged once your date is
+          confirmed.
         </p>
         <div className="mt-9 flex justify-center">
           <Button href="/" withArrow>

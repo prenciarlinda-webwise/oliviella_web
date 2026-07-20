@@ -157,7 +157,9 @@ export async function POST(req: NextRequest) {
         ],
         customer_email: input.email,
         metadata,
-        payment_intent_data: { metadata },
+        // Hold the deposit rather than charging it immediately, so it can be
+        // reviewed and confirmed (date/availability) before capturing in Stripe.
+        payment_intent_data: { metadata, capture_method: "manual" },
         success_url: `${base}/book/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${base}/book/cancelled`,
       },
