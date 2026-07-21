@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+import { SESSION_COOKIE_NAME, verifySessionCookie } from "@/lib/auth/session";
+
 // Per-request Content-Security-Policy with a fresh nonce. Next.js detects the
 // nonce in the request's CSP header and automatically applies it to its own
 // inline/bootstrap scripts, so we get a strict policy without 'unsafe-inline'
@@ -11,6 +13,21 @@ import { type NextRequest, NextResponse } from "next/server";
 // the CSP here and serve a static (nonce-less) CSP from next.config instead.
 
 export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Optimistic admin-auth gate: cheap signature+expiry check only, no fs/DB
+  // access (proxy checks must stay fast and are not the sole line of
+  // defense — see requireAdmin()/requireAdminApi(), which every admin
+  // page/route calls independently and which also enforce role).
+  if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
+    const session = verifySessionCookie(request.cookies.get(SESSION_COOKIE_NAME)?.value);
+    if (!session) {
+      const loginUrl = new URL("/admin/login", request.url);
+      loginUrl.searchParams.set("next", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const isDev = process.env.NODE_ENV === "development";
 

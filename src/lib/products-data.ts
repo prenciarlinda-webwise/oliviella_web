@@ -3,10 +3,8 @@ import "server-only";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import {
-  isBookableSlug,
-  type Experience,
-} from "@/lib/products";
+import { isBookableSlug, type Experience } from "@/lib/products";
+import { atomicWriteJson, withFileLock } from "@/lib/json-store";
 
 // File-backed Experiences catalog. `data/products.json` (gitignored) is the
 // sole source of truth once it exists on disk — self-seeded from
@@ -115,30 +113,6 @@ const DEFAULT_EXPERIENCES: Experience[] = [
     bookable: true,
   },
 ];
-
-async function atomicWriteJson(filePath: string, data: unknown): Promise<void> {
-  const tmp = path.join(
-    path.dirname(filePath),
-    `.${path.basename(filePath)}.${process.pid}.${Date.now()}.tmp`,
-  );
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(tmp, JSON.stringify(data, null, 2), "utf8");
-  await fs.rename(tmp, filePath);
-}
-
-// Single-process write serialization — this app runs as one persistent Node
-// process on the VPS (not serverless), so an in-memory lock per file is
-// enough to prevent a lost-update race between two near-simultaneous admin
-// writes. No cross-instance locking needed.
-const locks = new Map<string, Promise<unknown>>();
-function withFileLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
-  const run = (locks.get(key) ?? Promise.resolve()).then(fn, fn);
-  locks.set(
-    key,
-    run.catch(() => {}),
-  );
-  return run as Promise<T>;
-}
 
 export async function readExperiences(): Promise<Experience[]> {
   try {
