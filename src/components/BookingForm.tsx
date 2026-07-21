@@ -9,7 +9,6 @@ declare global {
 }
 import Link from "next/link";
 import { getBookableExperiences, isPayableTier } from "@/lib/products";
-import { site } from "@/lib/site";
 import { ArrowRight, LeafSmall } from "./icons";
 
 // ─── Charcuterie builder data ────────────────────────────────────────────────
@@ -175,11 +174,17 @@ type Props = {
   minDate: string;
   maxDate: string;
   initialSlug?: string;
+  depositFormatted: string;
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
+export default function BookingForm({
+  minDate,
+  maxDate,
+  initialSlug,
+  depositFormatted,
+}: Props) {
   const allExperiences = getBookableExperiences();
 
   const defaultSlug =
@@ -215,7 +220,6 @@ export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
 
   // UI state
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -317,34 +321,42 @@ export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
 
     setSubmitting(true);
     try {
-      const res = await fetch(site.formspreeEndpoint, {
+      const res = await fetch("/api/checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          _subject: `Booking Request — ${experienceName} · ${date}`,
-          _replyto: email,
+          experienceSlug: slug,
+          tierIndex,
+          date,
           name: customerName,
           email,
-          phone: phone || "Not provided",
-          experience: experienceName,
-          guest_count: tierLabel,
-          event_date: date,
-          customizations: customizations || "No customizations selected",
+          phone,
+          notes: customizations,
         }),
       });
-      if (!res.ok) {
-        setError("Something went wrong. Please try again or email us directly.");
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.url) {
+        setError(
+          data?.error ??
+            "Something went wrong. Please try again or email us directly.",
+        );
+        if (data?.fields) {
+          setFieldErrors((prev) => ({ ...prev, ...data.fields }));
+        }
         setSubmitting(false);
         return;
       }
+
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
-        event: "booking_request_sent",
+        event: "booking_checkout_started",
         experience_name: experienceName,
         guest_tier: tierLabel,
         event_date: date,
       });
-      setSubmitted(true);
+      // Stay disabled through the redirect so the button can't be re-clicked.
+      window.location.href = data.url;
     } catch {
       setError("Network error. Please check your connection and try again.");
       setSubmitting(false);
@@ -362,35 +374,6 @@ export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
         </Link>
         .
       </p>
-    );
-  }
-
-  // ─── Success screen ───────────────────────────────────────────────────────
-
-  if (submitted) {
-    return (
-      <div className="rounded-3xl border border-olive-mist bg-white/60 p-8 text-center sm:p-12">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-olive-mist">
-          <LeafSmall className="h-8 w-8 text-olive" />
-        </div>
-        <h2 className="mt-6 font-display text-3xl text-olive-deep">
-          Request received!
-        </h2>
-        <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-ink-soft">
-          Thank you, <span className="font-semibold text-olive-deep">{customerName}</span>. We have received your booking request and will send you a custom proposal within one business day.
-        </p>
-        <p className="mt-3 text-sm text-ink-soft">
-          A copy has been sent to <span className="font-medium text-ink">{email}</span>.
-        </p>
-        <div className="mt-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush"
-          >
-            Back to home
-          </Link>
-        </div>
-      </div>
     );
   }
 
@@ -779,6 +762,7 @@ export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
               error={error}
               submitting={submitting}
               onBack={goBack}
+              depositFormatted={depositFormatted}
             />
           </div>
         )}
@@ -894,6 +878,7 @@ export default function BookingForm({ minDate, maxDate, initialSlug }: Props) {
               error={error}
               submitting={submitting}
               onBack={goBack}
+              depositFormatted={depositFormatted}
             />
           </div>
         )}
@@ -909,15 +894,21 @@ function SubmitArea({
   error,
   submitting,
   onBack,
+  depositFormatted,
 }: {
   error: string | null;
   submitting: boolean;
   onBack: () => void;
+  depositFormatted: string;
 }) {
   return (
     <>
       <div className="mt-7 rounded-2xl bg-olive-mist/40 p-5 text-sm text-ink-soft">
-        We will review your request and send a custom proposal within one business day. No payment is required at this step.
+        You&apos;ll be sent to our secure Stripe checkout to authorize a{" "}
+        <span className="font-semibold text-olive-deep">{depositFormatted}</span>{" "}
+        deposit hold on your card to reserve this date. It isn&apos;t charged
+        until we confirm your booking — we&apos;ll follow up with your custom
+        proposal within one business day.
       </div>
 
       {error && (
@@ -933,7 +924,7 @@ function SubmitArea({
           disabled={submitting}
           className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {submitting ? "Sending request…" : "Send booking request"}
+          {submitting ? "Redirecting to checkout…" : "Continue to checkout"}
           {!submitting && (
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           )}
