@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Container from "@/components/Container";
 import BookingForm from "@/components/BookingForm";
 import { bookingWindow, formatDeposit } from "@/lib/booking";
+import { getBookableExperiences } from "@/lib/products-data";
 
 export const metadata: Metadata = {
   title: "Book Your Experience",
@@ -21,6 +22,7 @@ export default async function BookPage({
   const { experience } = await searchParams;
   const { minDate, maxDate } = bookingWindow();
   const deposit = formatDeposit();
+  const experiences = await getBookableExperiences();
 
   return (
     <section className="py-16 sm:py-20">
@@ -46,6 +48,7 @@ export default async function BookPage({
             maxDate={maxDate}
             initialSlug={experience}
             depositFormatted={deposit}
+            experiences={experiences}
           />
         </div>
       </Container>

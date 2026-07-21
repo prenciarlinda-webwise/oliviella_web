@@ -3,12 +3,8 @@ import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { OliveSprig, FlowerBloom, LeafSmall } from "@/components/icons";
-import {
-  experiences,
-  addOns,
-  isBookableSlug,
-  type Experience,
-} from "@/lib/products";
+import { addOns, isBookableSlug, type Experience } from "@/lib/products";
+import { readExperiences } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -55,7 +51,7 @@ function PriceTable({ experience }: { experience: Experience }) {
       <dl className="mt-4 divide-y divide-olive-mist/70">
         {pricing.tiers.map((tier) => (
           <div
-            key={tier.label}
+            key={tier.id}
             className="flex items-baseline justify-between gap-4 py-2.5"
           >
             <dt className="text-ink-soft">{tier.label}</dt>
@@ -145,7 +141,9 @@ function ExperienceSection({
   );
 }
 
-export default function CateringServicesPage() {
+export default async function CateringServicesPage() {
+  const experiences = await readExperiences();
+
   return (
     <>
       {/* Intro */}

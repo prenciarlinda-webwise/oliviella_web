@@ -8,7 +8,7 @@ declare global {
   }
 }
 import Link from "next/link";
-import { getBookableExperiences, isPayableTier } from "@/lib/products";
+import { isPayableTier, type Experience } from "@/lib/products";
 import { ArrowRight, LeafSmall } from "./icons";
 
 // ─── Charcuterie builder data ────────────────────────────────────────────────
@@ -175,6 +175,7 @@ type Props = {
   maxDate: string;
   initialSlug?: string;
   depositFormatted: string;
+  experiences: Experience[];
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -184,8 +185,8 @@ export default function BookingForm({
   maxDate,
   initialSlug,
   depositFormatted,
+  experiences: allExperiences,
 }: Props) {
-  const allExperiences = getBookableExperiences();
 
   const defaultSlug =
     initialSlug && allExperiences.some((e) => e.slug === initialSlug)
@@ -211,7 +212,7 @@ export default function BookingForm({
   const [inspirationLink, setInspirationLink] = useState("");
 
   // Common booking fields
-  const [tierIndex, setTierIndex] = useState<number | null>(null);
+  const [tierId, setTierId] = useState<string | null>(null);
   const [date, setDate] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
@@ -235,7 +236,7 @@ export default function BookingForm({
   function selectExperience(nextSlug: string) {
     setSlug(nextSlug);
     setStepIdx(0);
-    setTierIndex(null);
+    setTierId(null);
     setCharcSelections({});
     setEventType(""); setPalette(""); setFloralStyle(""); setFlowerEnhancements([]);
     setVenueName(""); setVenueAddress(""); setIndoorOutdoor(""); setSetupTime(""); setInspirationLink("");
@@ -256,8 +257,8 @@ export default function BookingForm({
   }
 
   function advanceTier() {
-    if (tierIndex === null) {
-      setFieldErrors({ tierIndex: "Please choose an option to continue." });
+    if (tierId === null) {
+      setFieldErrors({ tierId: "Please choose an option to continue." });
       return;
     }
     goNext();
@@ -309,14 +310,14 @@ export default function BookingForm({
     setFieldErrors({});
 
     const errs: Record<string, string> = {};
-    if (tierIndex === null) errs.tierIndex = "Please choose a guest count.";
+    if (tierId === null) errs.tierId = "Please choose a guest count.";
     if (!customerName.trim()) errs.name = "Please enter your name.";
     if (!email.trim()) errs.email = "Please enter your email.";
     if (!date) errs.date = "Please choose an event date.";
     if (Object.keys(errs).length > 0) { setFieldErrors(errs); return; }
 
     const experienceName = selected?.name ?? slug;
-    const tierLabel = tierIndex !== null ? (tiers[tierIndex]?.label ?? "") : "";
+    const tierLabel = tiers.find((t) => t.id === tierId)?.label ?? "";
     const customizations = buildNotes();
 
     setSubmitting(true);
@@ -326,7 +327,7 @@ export default function BookingForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           experienceSlug: slug,
-          tierIndex,
+          tierId,
           date,
           name: customerName,
           email,
@@ -650,14 +651,14 @@ export default function BookingForm({
             </h2>
 
             <div className="mt-5 grid gap-2.5 sm:grid-cols-2">
-              {tiers.map((tier, i) => {
+              {tiers.map((tier) => {
                 const payable = isPayableTier(tier);
-                const active = i === tierIndex;
+                const active = tier.id === tierId;
 
                 if (!payable) {
                   return (
                     <Link
-                      key={tier.label}
+                      key={tier.id}
                       href={`/contact?experience=${slug}`}
                       className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-olive-mist bg-white/40 px-4 py-3 transition hover:border-olive"
                     >
@@ -670,10 +671,10 @@ export default function BookingForm({
                 return (
                   <button
                     type="button"
-                    key={tier.label}
+                    key={tier.id}
                     onClick={() => {
-                      setTierIndex(i);
-                      setFieldErrors((p) => ({ ...p, tierIndex: "" }));
+                      setTierId(tier.id);
+                      setFieldErrors((p) => ({ ...p, tierId: "" }));
                     }}
                     aria-pressed={active}
                     className={`flex items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-left transition ${
@@ -689,8 +690,8 @@ export default function BookingForm({
               })}
             </div>
 
-            {fieldErrors.tierIndex && (
-              <p className="mt-2 text-sm text-rose">{fieldErrors.tierIndex}</p>
+            {fieldErrors.tierId && (
+              <p className="mt-2 text-sm text-rose">{fieldErrors.tierId}</p>
             )}
 
             <div className="mt-8 flex gap-3">

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { LeafSmall, OliveSprig, FlowerBloom } from "@/components/icons";
-import { getExperience } from "@/lib/products";
+import { getExperience } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -26,8 +26,8 @@ const events = [
   "Private Gatherings",
 ];
 
-export default function FoodCartMiamiPage() {
-  const cart = getExperience("food-cart-miami");
+export default async function FoodCartMiamiPage() {
+  const cart = await getExperience("food-cart-miami");
   if (!cart) return null;
 
   return (
@@ -111,7 +111,7 @@ export default function FoodCartMiamiPage() {
               <dl className="mt-4 divide-y divide-olive-mist/70">
                 {cart.pricing.tiers.map((tier) => (
                   <div
-                    key={tier.label}
+                    key={tier.id}
                     className="flex items-baseline justify-between gap-4 py-2.5"
                   >
                     <dt className="text-ink-soft">{tier.label}</dt>

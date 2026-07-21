@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
   const input = parsed.value;
 
   // 6. Re-derive everything price/date-related from the trusted catalog.
-  const booking = resolveBooking(input.experienceSlug, input.tierIndex);
+  const booking = await resolveBooking(input.experienceSlug, input.tierId);
   if (!booking) {
     return NextResponse.json(
       { error: "That experience or guest tier can't be booked online." },
@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
   const metadata: Record<string, string> = {
     experienceSlug: booking.experience.slug,
     experienceName: booking.experience.name,
-    tierIndex: String(booking.tierIndex),
+    tierId: booking.tierId,
     tierLabel: booking.tier.label,
     eventDate: dateCheck.date,
     customerName: input.name,
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
       JSON.stringify([
         input.email,
         booking.experience.slug,
-        booking.tierIndex,
+        booking.tierId,
         dateCheck.date,
         booking.depositCents,
       ]),

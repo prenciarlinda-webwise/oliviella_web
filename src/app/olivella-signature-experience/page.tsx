@@ -3,7 +3,7 @@ import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { LeafSmall, OliveSprig, FlowerBloom } from "@/components/icons";
-import { getExperience } from "@/lib/products";
+import { getExperience } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/olivella-signature-experience" },
 };
 
-export default function OlivellaSignatureExperiencePage() {
-  const experience = getExperience("olivella-signature-experience");
+export default async function OlivellaSignatureExperiencePage() {
+  const experience = await getExperience("olivella-signature-experience");
   if (!experience) return null;
 
   return (
@@ -94,7 +94,7 @@ export default function OlivellaSignatureExperiencePage() {
               <dl className="mt-4 divide-y divide-olive-mist/70">
                 {experience.pricing.tiers.map((tier) => (
                   <div
-                    key={tier.label}
+                    key={tier.id}
                     className="flex items-baseline justify-between gap-4 py-2.5"
                   >
                     <dt className="text-ink-soft">{tier.label}</dt>

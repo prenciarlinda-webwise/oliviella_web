@@ -35,6 +35,11 @@ yarn-error.log*
 # ...but keep the committed template (no secrets in it)
 !.env.example
 
+# admin-editable runtime data (product catalog, admin accounts) — lives only
+# on the deployed server's disk, never in version control. Do not run
+# `git clean -fd` on the VPS once this directory exists.
+/data
+
 # IDE project files
 .idea/
 .vscode/

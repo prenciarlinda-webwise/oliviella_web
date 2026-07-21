@@ -5,7 +5,7 @@
 
 export type BookingInput = {
   experienceSlug: string;
-  tierIndex: number;
+  tierId: string;
   date: string;
   name: string;
   email: string;
@@ -26,6 +26,7 @@ const LIMITS = {
   notes: 1000,
   date: 10,
   slug: 80,
+  tierId: 80,
 } as const;
 
 // Pragmatic email shape check. Real deliverability is confirmed by Stripe's
@@ -49,16 +50,9 @@ export function parseBookingInput(raw: unknown): ParseResult {
     errors.experienceSlug = "Please choose an experience.";
   }
 
-  // tierIndex may arrive as a number or numeric string; normalize strictly.
-  const tierRaw = body.tierIndex;
-  const tierIndex =
-    typeof tierRaw === "number"
-      ? tierRaw
-      : typeof tierRaw === "string" && /^\d+$/.test(tierRaw.trim())
-        ? Number(tierRaw.trim())
-        : NaN;
-  if (!Number.isInteger(tierIndex) || tierIndex < 0 || tierIndex > 50) {
-    errors.tierIndex = "Please choose a guest count.";
+  const tierId = asString(body.tierId);
+  if (!tierId || tierId.length > LIMITS.tierId) {
+    errors.tierId = "Please choose a guest count.";
   }
 
   const date = asString(body.date);
@@ -84,6 +78,6 @@ export function parseBookingInput(raw: unknown): ParseResult {
 
   return {
     ok: true,
-    value: { experienceSlug, tierIndex, date, name, email, phone, notes },
+    value: { experienceSlug, tierId, date, name, email, phone, notes },
   };
 }

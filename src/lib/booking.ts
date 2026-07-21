@@ -3,16 +3,11 @@ import "server-only";
 // Server-only booking rules. This module is the single source of truth for the
 // money and date logic of a reservation. It must NEVER be imported by a Client
 // Component — the `server-only` import above turns any such attempt into a build
-// error. The client only ever sends a product slug, a tier index and a date;
+// error. The client only ever sends a product slug, a tier id and a date;
 // every price and rule is re-derived here from the trusted catalog.
 
-import {
-  experiences,
-  isBookableSlug,
-  isPayableTier,
-  type Experience,
-  type PriceTier,
-} from "@/lib/products";
+import { isBookableSlug, isPayableTier, type Experience, type PriceTier } from "@/lib/products";
+import { readExperiences } from "@/lib/products-data";
 
 /** Read a positive integer env var, falling back to a default. */
 function intFromEnv(name: string, fallback: number): number {
@@ -50,34 +45,35 @@ export function formatDeposit(): string {
 export type ResolvedBooking = {
   experience: Experience;
   tier: PriceTier;
-  tierIndex: number;
+  tierId: string;
   depositCents: number;
   currency: string;
 };
 
 /**
- * Resolve and validate a (slug, tierIndex) pair against the trusted catalog.
+ * Resolve and validate a (slug, tierId) pair against the trusted catalog.
  * Returns null when the experience is not bookable, the tier does not exist, or
  * the tier is the non-payable "Custom proposal" band. The returned deposit is
  * always the server constant — the caller must use it, not any client value.
  */
-export function resolveBooking(
+export async function resolveBooking(
   slug: string,
-  tierIndex: number,
-): ResolvedBooking | null {
+  tierId: string,
+): Promise<ResolvedBooking | null> {
   if (!isBookableSlug(slug)) return null;
 
+  const experiences = await readExperiences();
   const experience = experiences.find((e) => e.slug === slug);
   if (!experience || !experience.bookable) return null;
   if (experience.pricing.kind !== "guests") return null;
 
-  const tier = experience.pricing.tiers[tierIndex];
+  const tier = experience.pricing.tiers.find((t) => t.id === tierId);
   if (!tier || !isPayableTier(tier)) return null;
 
   return {
     experience,
     tier,
-    tierIndex,
+    tierId,
     depositCents: bookingConfig.depositCents,
     currency: bookingConfig.currency,
   };
