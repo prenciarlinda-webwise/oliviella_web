@@ -156,6 +156,10 @@ export async function POST(req: NextRequest) {
           },
         ],
         customer_email: input.email,
+        // Always create a real Customer record (not just an email on the
+        // session) so this person is findable under Customers/Payments in
+        // the Dashboard and reusable for the balance invoice later.
+        customer_creation: "always",
         metadata,
         // Hold the deposit rather than charging it immediately, so it can be
         // reviewed and confirmed (date/availability) before capturing in Stripe.
