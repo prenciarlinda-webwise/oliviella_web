@@ -20,7 +20,8 @@ export const site = {
   regionName: "Florida",
   serviceArea: "Miami, Fort Lauderdale and the Palm Beaches",
 
-  // Formspree AJAX endpoint shared by the contact + newsletter forms.
+  // Formspree AJAX endpoint shared by the contact form, newsletter form and
+  // the Stripe webhook's order notifications.
   formspreeEndpoint: "https://formspree.io/f/xaqzdpyo",
 } as const;
 
