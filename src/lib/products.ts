@@ -12,7 +12,6 @@
 export type PriceTier = {
   id: string;
   label: string;
-  price: string;
   /** Starting price in cents, or null for the non-payable "Custom proposal" tier. */
   priceCents: number | null;
 };
@@ -79,4 +78,12 @@ export function isBookableSlug(slug: string): slug is BookableSlug {
  */
 export function isPayableTier(tier: PriceTier): boolean {
   return tier.priceCents !== null;
+}
+
+/** The single source of truth for a tier's displayed price — derived from
+ * `priceCents` rather than stored as separate free text, so the display copy
+ * can never drift out of sync with the number used for balance math. */
+export function formatTierPrice(tier: PriceTier): string {
+  if (tier.priceCents === null) return "Custom proposal";
+  return `Starting at $${(tier.priceCents / 100).toLocaleString("en-US")}`;
 }

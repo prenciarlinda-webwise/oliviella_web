@@ -49,7 +49,7 @@ export default function ProductEditForm({ experience }: { experience: Experience
   function addTier() {
     setTiers((prev) => [
       ...prev,
-      { id: newTierId(experience.slug, prev), label: "", price: "", priceCents: 0 },
+      { id: newTierId(experience.slug, prev), label: "", priceCents: 0 },
     ]);
   }
 
@@ -75,7 +75,6 @@ export default function ProductEditForm({ experience }: { experience: Experience
           tiers: tiers.map((t) => ({
             id: t.id,
             label: t.label,
-            price: t.price,
             priceCents: t.priceCents,
           })),
         }),
@@ -142,7 +141,7 @@ export default function ProductEditForm({ experience }: { experience: Experience
             type="button"
             disabled={!imageFile || uploading}
             onClick={handleImageUpload}
-            className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-olive-deep transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-berry transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
           >
             {uploading ? "Uploading…" : "Upload new image"}
           </button>
@@ -188,27 +187,19 @@ export default function ProductEditForm({ experience }: { experience: Experience
       <section className="rounded-2xl border border-olive-mist bg-white/70 p-6">
         <h2 className="text-lg font-semibold text-olive-deep">Pricing tiers</h2>
         <p className="mt-1 text-sm text-ink-soft">
-          Leave &quot;Starting price&quot; at $0 for a non-payable tier (e.g. &quot;Custom
+          Customers see this as &quot;Starting at $X&quot;, generated automatically from
+          the number below. Leave it at $0 for a non-payable tier (e.g. &quot;Custom
           proposal&quot;) — it&apos;ll route customers to a quote request instead of checkout.
         </p>
 
         <div className="mt-4 space-y-4">
           {tiers.map((tier) => (
-            <div key={tier.id} className="grid gap-3 rounded-xl bg-olive-mist/20 p-4 sm:grid-cols-[2fr_1fr_1fr_auto]">
+            <div key={tier.id} className="grid gap-3 rounded-xl bg-olive-mist/20 p-4 sm:grid-cols-[2fr_1fr_auto]">
               <div>
                 <label className="mb-1 block text-xs font-semibold text-olive-deep">Label</label>
                 <input
                   value={tier.label}
                   onChange={(e) => updateTier(tier.id, { label: e.target.value })}
-                  className={inputCls}
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-xs font-semibold text-olive-deep">Display price</label>
-                <input
-                  value={tier.price}
-                  onChange={(e) => updateTier(tier.id, { price: e.target.value })}
-                  placeholder="Starting at $1,300"
                   className={inputCls}
                 />
               </div>
@@ -256,7 +247,7 @@ export default function ProductEditForm({ experience }: { experience: Experience
         type="button"
         disabled={saving}
         onClick={handleSave}
-        className="rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
+        className="rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-berry transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
       >
         {saving ? "Saving…" : "Save changes"}
       </button>

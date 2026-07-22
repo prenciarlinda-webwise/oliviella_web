@@ -3,6 +3,7 @@ import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { LeafSmall, OliveSprig, FlowerBloom } from "@/components/icons";
+import { formatTierPrice } from "@/lib/products";
 import { getExperience } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
@@ -116,7 +117,7 @@ export default async function FoodCartMiamiPage() {
                   >
                     <dt className="text-ink-soft">{tier.label}</dt>
                     <dd className="text-right font-display text-xl text-olive-deep">
-                      {tier.price}
+                      {formatTierPrice(tier)}
                     </dd>
                   </div>
                 ))}

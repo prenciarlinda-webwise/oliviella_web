@@ -3,7 +3,7 @@ import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { OliveSprig, FlowerBloom, LeafSmall } from "@/components/icons";
-import { addOns, isBookableSlug, type Experience } from "@/lib/products";
+import { addOns, formatTierPrice, isBookableSlug, type Experience } from "@/lib/products";
 import { readExperiences } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
@@ -56,7 +56,7 @@ function PriceTable({ experience }: { experience: Experience }) {
           >
             <dt className="text-ink-soft">{tier.label}</dt>
             <dd className="text-right font-display text-xl text-olive-deep">
-              {tier.price}
+              {formatTierPrice(tier)}
             </dd>
           </div>
         ))}

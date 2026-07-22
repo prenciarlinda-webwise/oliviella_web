@@ -15,7 +15,6 @@ const LIMITS = {
   includeItem: 120,
   includesCount: 30,
   tierLabel: 80,
-  tierPrice: 80,
   tiersCount: 12,
 } as const;
 
@@ -34,7 +33,6 @@ function parseTiers(raw: unknown): PriceTier[] | null {
 
     const id = asString(obj.id);
     const label = asString(obj.label);
-    const price = asString(obj.price);
     const priceCentsRaw = obj.priceCents;
     const priceCents =
       typeof priceCentsRaw === "number" && Number.isFinite(priceCentsRaw) && priceCentsRaw > 0
@@ -43,10 +41,9 @@ function parseTiers(raw: unknown): PriceTier[] | null {
 
     if (!id || seenIds.has(id)) return null;
     if (!label || label.length > LIMITS.tierLabel) return null;
-    if (!price || price.length > LIMITS.tierPrice) return null;
 
     seenIds.add(id);
-    tiers.push({ id, label, price, priceCents });
+    tiers.push({ id, label, priceCents });
   }
   return tiers;
 }
@@ -99,7 +96,7 @@ export async function PATCH(
   }
 
   if (!tiers) {
-    errors.tiers = "Check the pricing tiers — each needs a label and a display price.";
+    errors.tiers = "Check the pricing tiers — each needs a label and a starting price.";
   }
 
   if (Object.keys(errors).length > 0) {

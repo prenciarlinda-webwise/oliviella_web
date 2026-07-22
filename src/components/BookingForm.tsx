@@ -8,7 +8,7 @@ declare global {
   }
 }
 import Link from "next/link";
-import { isPayableTier, type Experience } from "@/lib/products";
+import { formatTierPrice, isPayableTier, type Experience } from "@/lib/products";
 import { ArrowRight, LeafSmall } from "./icons";
 
 // ─── Charcuterie builder data ────────────────────────────────────────────────
@@ -166,7 +166,7 @@ const labelCls = "mb-1.5 block text-sm font-semibold text-olive-deep";
 const backBtnCls =
   "rounded-full border border-rose/40 px-7 py-3.5 text-sm font-semibold text-olive-deep transition-all duration-300 hover:border-rose hover:bg-blush-soft/60";
 const nextBtnCls =
-  "inline-flex items-center justify-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush";
+  "inline-flex items-center justify-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-berry transition-all duration-300 hover:bg-blush";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -684,7 +684,7 @@ export default function BookingForm({
                     }`}
                   >
                     <span className="text-ink-soft">{tier.label}</span>
-                    <span className="text-sm text-olive-soft">{tier.price}</span>
+                    <span className="text-sm text-olive-soft">{formatTierPrice(tier)}</span>
                   </button>
                 );
               })}
@@ -923,7 +923,7 @@ function SubmitArea({
         <button
           type="submit"
           disabled={submitting}
-          className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
+          className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-berry transition-all duration-300 hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? "Redirecting to checkout…" : "Continue to checkout"}
           {!submitting && (
