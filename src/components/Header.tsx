@@ -55,13 +55,6 @@ export default function Header() {
             {/* Dropdown panel — pt-2 fills the hover gap so the menu stays open */}
             <div className="pointer-events-none absolute left-1/2 top-full w-72 -translate-x-1/2 pt-2 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100">
               <div className="overflow-hidden rounded-2xl border border-olive-mist bg-cream/98 py-1.5 shadow-lg shadow-olive-deep/8 ring-1 ring-white/50 backdrop-blur">
-                <Link
-                  href="/catering-services"
-                  className="block px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] text-olive transition-colors hover:bg-olive-mist/50"
-                >
-                  All experiences
-                </Link>
-                <div className="mx-4 my-1 border-t border-olive-mist" />
                 {serviceDropdown.map((item) => (
                   <Link
                     key={item.href}
@@ -193,13 +186,6 @@ export default function Header() {
 
             {servicesOpen && (
               <div className="mb-1 ml-3 mt-0.5 space-y-0.5">
-                <Link
-                  href="/catering-services"
-                  onClick={() => setOpen(false)}
-                  className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-olive-deep hover:bg-olive-mist/50"
-                >
-                  All experiences
-                </Link>
                 {serviceDropdown.map((item) => (
                   <Link
                     key={item.href}
