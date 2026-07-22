@@ -139,7 +139,7 @@ function BookingCard({ booking }: { booking: BookingSummary }) {
             type="button"
             onClick={capture}
             disabled={busy}
-            className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-olive-deep transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-berry transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
           >
             {busy ? "Capturing…" : "Capture deposit"}
           </button>
@@ -191,7 +191,7 @@ function BookingCard({ booking }: { booking: BookingSummary }) {
               type="button"
               disabled={busy}
               onClick={() => chargeBalance(booking.balanceStatus === "sent")}
-              className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-olive-deep transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-berry transition hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
             >
               {busy ? "Sending…" : "Send invoice"}
             </button>

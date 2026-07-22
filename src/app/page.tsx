@@ -55,14 +55,14 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative w-full">
+      <section className="relative w-full min-h-[560px] sm:min-h-[620px] lg:min-h-[760px]">
         <Image
           src="/images/food-and-flower-cart.jpeg"
           alt="Olivella food and flower cart experience at a Miami event"
-          width={1402}
-          height={1122}
+          fill
           priority
-          className="w-full h-auto block"
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-olive-deep/55">
           <Container className="rise text-center">

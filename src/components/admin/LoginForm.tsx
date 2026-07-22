@@ -81,7 +81,7 @@ export default function LoginForm({ next }: { next: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-6 w-full rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep transition-all duration-300 hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-6 w-full rounded-full bg-rose px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-berry transition-all duration-300 hover:bg-blush disabled:cursor-not-allowed disabled:opacity-60"
       >
         {submitting ? "Signing in…" : "Sign in"}
       </button>

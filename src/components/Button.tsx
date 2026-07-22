@@ -5,7 +5,7 @@ import { ArrowRight } from "./icons";
 type Variant = "primary" | "secondary" | "light";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-rose text-olive-deep hover:bg-blush shadow-sm shadow-rose/30",
+  primary: "bg-rose text-berry hover:bg-blush shadow-sm shadow-rose/30",
   secondary:
     "border border-rose/40 text-olive-deep hover:border-rose hover:bg-blush-soft/60",
   light: "bg-cream text-olive-deep hover:bg-blush-soft",

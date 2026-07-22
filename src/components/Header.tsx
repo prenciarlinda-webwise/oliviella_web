@@ -142,7 +142,7 @@ export default function Header() {
           </a>
           <Link
             href="/book"
-            className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold text-olive-deep transition-colors hover:bg-blush"
+            className="rounded-full bg-rose px-5 py-2.5 text-sm font-semibold text-berry transition-colors hover:bg-blush"
           >
             Book your event
           </Link>
@@ -285,7 +285,7 @@ export default function Header() {
             <Link
               href="/book"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-rose px-5 py-3 text-center text-sm font-semibold text-olive-deep transition-colors hover:bg-blush"
+              className="mt-2 rounded-full bg-rose px-5 py-3 text-center text-sm font-semibold text-berry transition-colors hover:bg-blush"
             >
               Book your event
             </Link>

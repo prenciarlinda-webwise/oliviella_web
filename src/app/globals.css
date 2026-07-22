@@ -16,9 +16,14 @@
   --color-olive-mist: #e7e9d6;
 
   /* Blush (accent) */
-  --color-blush: #f1cfd3;
+  --color-blush: #fad4d9;
   --color-blush-soft: #fbecee;
-  --color-rose: #d7989d;
+  --color-rose: #f5c6d6;
+  /* Text color for use on rose/blush button fills — deep rosewood, same hue
+     family as the pink so it harmonizes instead of the cold-green-on-pink
+     clash olive-deep created there. olive-deep stays everywhere else
+     (headings, logo, nav, dark sections). */
+  --color-berry: #7a3b4a;
 }
 
 @theme inline {
