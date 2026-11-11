@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { LeafSmall, OliveSprig, FlowerBloom } from "@/components/icons";
-import { formatTierPrice } from "@/lib/products";
+import PriceTable from "@/components/PriceTable";
+import { priceNotes } from "@/lib/products";
+import { pageMetadata } from "@/lib/seo";
 import { getExperience } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Food Cart Miami | Mediterranean Grazing Cart Experience",
+export const metadata = pageMetadata({
+  title: "Charcuterie Cart Miami | Mediterranean Charcuterie Experience",
   description:
-    "Book a luxury Mediterranean grazing cart in Miami for weddings, corporate events, bridal showers and parties. Premium imported cheeses, charcuterie and seasonal accompaniments styled by Olivella across South Florida.",
-  alternates: { canonical: "/food-cart-miami" },
-};
+    "Mediterranean charcuterie cart in Miami from $1,500: imported cheeses and charcuterie, fruit, honey and bread, hosted by our attendant. Serving Miami, Fort Lauderdale and the Palm Beaches.",
+  path: "/food-cart-miami",
+});
 
 const events = [
   "Weddings",
@@ -45,22 +46,19 @@ export default async function FoodCartMiamiPage() {
         />
         <Container className="relative py-20 text-center sm:py-28">
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
-            Food Cart Miami
+            Charcuterie Cart Miami
           </span>
           <h1 className="mx-auto mt-5 max-w-3xl text-balance text-5xl text-olive-deep sm:text-6xl">
-            Mediterranean grazing cart experience in Miami
+            The Charcuterie Cart Experience in Miami
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
-            An elevated grazing cart featuring premium imported cheeses, artisanal
-            charcuterie, fresh fruits, honey and breads — beautifully styled and
-            continuously replenished throughout your event in {site.serviceArea}.
+            A Mediterranean charcuterie cart with imported cheeses and
+            charcuterie, fresh fruit, honey and bread, styled and continuously
+            replenished throughout your celebration in {site.serviceArea}.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button href="/book?experience=food-cart-miami" withArrow>
-              Book your food cart
-            </Button>
-            <Button href="/contact" variant="secondary">
-              Request a custom quote
+              Check your date
             </Button>
           </div>
         </Container>
@@ -104,29 +102,18 @@ export default async function FoodCartMiamiPage() {
               ))}
             </ul>
 
-            {/* Pricing */}
-            <div className="mt-7 rounded-2xl bg-white/70 p-6 ring-1 ring-olive-mist">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-olive">
-                Starting Investment
-              </p>
-              <dl className="mt-4 divide-y divide-olive-mist/70">
-                {cart.pricing.tiers.map((tier) => (
-                  <div
-                    key={tier.id}
-                    className="flex items-baseline justify-between gap-4 py-2.5"
-                  >
-                    <dt className="text-ink-soft">{tier.label}</dt>
-                    <dd className="text-right font-display text-xl text-olive-deep">
-                      {formatTierPrice(tier)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+            <PriceTable experience={cart}>
+              {priceNotes(cart.slug).map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </PriceTable>
+            <p className="mt-4 text-sm font-medium text-olive-deep">
+              Every item is labeled. Allergies or dietary needs? Tell us when you book.
+            </p>
 
             <div className="mt-7">
               <Button href="/book?experience=food-cart-miami" withArrow>
-                Book this experience
+                Check your date
               </Button>
             </div>
           </div>
@@ -141,11 +128,11 @@ export default async function FoodCartMiamiPage() {
               Perfect for
             </span>
             <h2 className="mt-4 text-4xl text-olive-deep sm:text-5xl">
-              Miami food cart events
+              Miami charcuterie cart events
             </h2>
             <p className="mt-4 text-lg text-ink-soft">
-              Our grazing cart transforms any event into a Mediterranean dining
-              experience guests will keep talking about.
+              Our charcuterie cart brings a Mediterranean table to any
+              celebration, hosted by our attendant.
             </p>
           </div>
           <div className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-3">
@@ -168,19 +155,24 @@ export default async function FoodCartMiamiPage() {
             <OliveSprig className="absolute -left-6 -top-6 h-32 w-32 text-olive/20" />
             <FlowerBloom className="absolute -bottom-6 -right-6 h-32 w-32 text-rose/30" />
             <h2 className="text-4xl text-olive-deep sm:text-5xl">
-              Reserve your grazing cart in {site.city}
+              Reserve your charcuterie cart in {site.city}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
               Tell us your event date, location and guest count. We reply within
               one business day with a curated proposal for your celebration.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Button href="/book?experience=food-cart-miami" variant="secondary" withArrow>
-                Book your food cart
+            <div className="mt-8 flex flex-col items-center gap-5">
+              <Button href="/book?experience=food-cart-miami" withArrow>
+                Check your date
               </Button>
-              <Button href="/contact" variant="secondary">
-                Get in touch
-              </Button>
+              <a
+                href={site.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep underline underline-offset-4 hover:text-olive"
+              >
+                Message us on WhatsApp
+              </a>
             </div>
           </div>
         </Container>

@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { LeafSmall, OliveSprig, FlowerBloom } from "@/components/icons";
-import { formatTierPrice } from "@/lib/products";
+import PriceTable from "@/components/PriceTable";
+import { INCLUDED_NOTES, SIGNATURE_SAVINGS } from "@/lib/products";
+import { pageMetadata } from "@/lib/seo";
 import { getExperience } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "The Olivella Signature Experience | Flowers & Grazing in Miami",
+export const metadata = pageMetadata({
+  title: "The Signature Experience | Flower Cart & Charcuterie Cart in Miami",
   description:
-    "The Olivella Signature Experience combines a luxury flower cart and Mediterranean grazing cart into one immersive event centerpiece. Available for weddings, bridal showers and special events across Miami and South Florida.",
-  alternates: { canonical: "/olivella-signature-experience" },
-};
+    "The Signature Experience pairs our flower cart and Mediterranean charcuterie cart from $2,700, about 10% less than booking them separately. Serving Miami, Fort Lauderdale and the Palm Beaches.",
+  path: "/olivella-signature-experience",
+});
 
 export default async function OlivellaSignatureExperiencePage() {
   const experience = await getExperience("olivella-signature-experience");
@@ -42,10 +43,7 @@ export default async function OlivellaSignatureExperiencePage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button href="/book?experience=olivella-signature-experience" withArrow>
-              Reserve this experience
-            </Button>
-            <Button href="/contact" variant="secondary">
-              Request a custom quote
+              Check your date
             </Button>
           </div>
         </Container>
@@ -70,7 +68,7 @@ export default async function OlivellaSignatureExperiencePage() {
             <p className="mt-1 text-lg leading-relaxed text-ink-soft">
               Designed for hosts who want more than catering or décor — they
               want an atmosphere their guests will remember. The Signature
-              Experience pairs our flower cart and grazing cart side by side,
+              Experience pairs our flower cart and charcuterie cart side by side,
               styled together for a cohesive, stunning presentation across{" "}
               {site.serviceArea}.
             </p>
@@ -87,29 +85,21 @@ export default async function OlivellaSignatureExperiencePage() {
               ))}
             </ul>
 
-            {/* Pricing */}
-            <div className="mt-7 rounded-2xl bg-white/70 p-6 ring-1 ring-olive-mist">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-rose">
-                Starting Investment
+            <PriceTable experience={experience}>
+              <p className="font-semibold text-berry">{SIGNATURE_SAVINGS}</p>
+              <p>
+                <strong className="text-olive-deep">Flower cart:</strong>{" "}
+                {INCLUDED_NOTES["flower-cart-miami"]}
               </p>
-              <dl className="mt-4 divide-y divide-olive-mist/70">
-                {experience.pricing.tiers.map((tier) => (
-                  <div
-                    key={tier.id}
-                    className="flex items-baseline justify-between gap-4 py-2.5"
-                  >
-                    <dt className="text-ink-soft">{tier.label}</dt>
-                    <dd className="text-right font-display text-xl text-olive-deep">
-                      {formatTierPrice(tier)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+              <p>
+                <strong className="text-olive-deep">Charcuterie cart:</strong>{" "}
+                {INCLUDED_NOTES["food-cart-miami"]}
+              </p>
+            </PriceTable>
 
             <div className="mt-7">
               <Button href="/book?experience=olivella-signature-experience" withArrow>
-                Reserve your date
+                Check your date
               </Button>
             </div>
           </div>
@@ -124,21 +114,21 @@ export default async function OlivellaSignatureExperiencePage() {
               One cohesive vision
             </span>
             <h2 className="mt-4 text-4xl text-olive-deep sm:text-5xl">
-              Florals and grazing, styled as one
+              Florals and charcuterie, styled as one
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
-              The Signature Experience is curated so your flower cart and grazing
-              cart share the same color story, the same visual language, and the
+              The Signature Experience is curated so your flower cart and
+              charcuterie cart share the same color story, the same visual language, and the
               same level of care — creating a moment your guests will photograph
               and remember.
             </p>
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Button href="/flower-cart-miami" variant="secondary">
-              See the flower cart
+              See the Flower Cart Experience
             </Button>
             <Button href="/food-cart-miami" variant="secondary">
-              See the food cart
+              See the Charcuterie Cart Experience
             </Button>
           </div>
         </Container>
@@ -157,12 +147,9 @@ export default async function OlivellaSignatureExperiencePage() {
               Tell us your event date, guest count and vision. We reply within
               one business day with a fully curated proposal.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-8 flex justify-center">
               <Button href="/book?experience=olivella-signature-experience" withArrow>
-                Book now
-              </Button>
-              <Button href="/contact" variant="secondary">
-                Get in touch
+                Check your date
               </Button>
             </div>
           </div>

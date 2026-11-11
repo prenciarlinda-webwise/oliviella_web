@@ -10,7 +10,7 @@
   --color-ink-soft: #6c6a58;
 
   /* Olive (primary) */
-  --color-olive: #6f774a;
+  --color-olive: #5f6640; /* darker for readable small links */
   --color-olive-deep: #103004; /* brand deep green (logo) */
   --color-olive-soft: #9aa173;
   --color-olive-mist: #e7e9d6;

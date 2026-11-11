@@ -43,6 +43,17 @@ const nextConfig: NextConfig = {
         destination: "/catering-services",
         permanent: true,
       },
+      // Old bouquet-bar page now lives on the flower cart page.
+      {
+        source: "/riviera-bouquet-bar",
+        destination: "/flower-cart-miami",
+        statusCode: 301,
+      },
+      // Admin uploads moved from public/images/uploads to /uploads (route handler).
+      { source: "/images/uploads/:file", destination: "/uploads/:file", permanent: true },
+      // Stripe checkout return pages, retired with online deposits.
+      { source: "/book/success", destination: "/book", permanent: false },
+      { source: "/book/cancelled", destination: "/book", permanent: false },
       // Canonical redirect for the short URL variant.
       {
         source: "/terms",

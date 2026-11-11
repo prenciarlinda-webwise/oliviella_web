@@ -18,10 +18,10 @@ export default function Footer() {
         {/* Newsletter signup */}
         <div className="flex flex-col gap-6 border-b border-cream/15 pb-12 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-md">
-            <h4 className="font-display text-2xl text-cream">Stay in the loop</h4>
+            <h4 className="font-display text-2xl text-cream">Get 5% off</h4>
             <p className="mt-2 text-sm text-cream/70">
-              Seasonal menus and new flower cart dates, straight to your
-              inbox.
+              Join our list and get 5% off your first booking, plus seasonal
+              menus and launch news. One email a month.
             </p>
           </div>
           <NewsletterForm />
@@ -34,11 +34,11 @@ export default function Footer() {
             alt={site.name}
             width={1583}
             height={770}
+            loading="eager"
             className="h-24 w-auto"
           />
           <p className="mt-4 text-sm leading-relaxed text-cream/70">
-            Charcuterie carts and pick-your-own flower carts for
-            weddings, showers and parties across {site.serviceArea}.
+            {site.tagline}
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export default function Footer() {
       <div className="border-t border-cream/15">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 py-6 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>
-            &copy; {year} {site.name}. All rights reserved.
+            &copy; {year} {site.legalName}. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             <Link href="/privacy-policy" className="transition-colors hover:text-blush">

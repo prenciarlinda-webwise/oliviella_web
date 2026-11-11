@@ -25,36 +25,48 @@ export type SessionPayload = {
   exp: number;
 };
 
-function getSecret(): string {
+// A short secret makes session cookies forgeable by brute force. 32+
+// characters (e.g. `openssl rand -base64 48`) is required.
+const MIN_SECRET_LENGTH = 32;
+
+function getSecret(): string | null {
   const secret = process.env.ADMIN_SESSION_SECRET;
+  return secret && secret.length >= MIN_SECRET_LENGTH ? secret : null;
+}
+
+function requireSecret(): string {
+  const secret = getSecret();
   if (!secret) {
     throw new Error(
-      "ADMIN_SESSION_SECRET is not set. Add it to your environment to enable admin login.",
+      `ADMIN_SESSION_SECRET must be set to at least ${MIN_SECRET_LENGTH} characters to enable admin login.`,
     );
   }
   return secret;
 }
 
-function sign(payloadB64url: string): string {
-  return createHmac("sha256", getSecret()).update(payloadB64url).digest("base64url");
+function sign(payloadB64url: string, secret: string): string {
+  return createHmac("sha256", secret).update(payloadB64url).digest("base64url");
 }
 
 export function signSessionCookie(adminId: string): string {
   const now = Date.now();
   const payload: SessionPayload = { adminId, iat: now, exp: now + SESSION_MAX_AGE_MS };
   const payloadB64url = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-  return `${payloadB64url}.${sign(payloadB64url)}`;
+  return `${payloadB64url}.${sign(payloadB64url, requireSecret())}`;
 }
 
 export function verifySessionCookie(raw: string | undefined | null): SessionPayload | null {
   if (!raw) return null;
+  // Fail closed (treat as logged out) rather than crash every admin request.
+  const secret = getSecret();
+  if (!secret) return null;
   const dotIndex = raw.indexOf(".");
   if (dotIndex === -1) return null;
 
   const payloadB64url = raw.slice(0, dotIndex);
   const signature = raw.slice(dotIndex + 1);
 
-  const expectedSignature = sign(payloadB64url);
+  const expectedSignature = sign(payloadB64url, secret);
   const provided = Buffer.from(signature);
   const expected = Buffer.from(expectedSignature);
   if (provided.length !== expected.length || !timingSafeEqual(provided, expected)) {

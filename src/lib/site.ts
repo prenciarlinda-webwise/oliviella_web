@@ -2,11 +2,19 @@
 // Update these as the real branding and contact info come in.
 export const site = {
   name: "Olivella",
-  tagline: "Charcuterie carts and flower cart in Miami",
+  tagline:
+    "Floral and charcuterie experiences for weddings, showers and celebrations across Miami, Fort Lauderdale and the Palm Beaches.",
   description:
-    "Olivella designs Mediterranean charcuterie carts and pick-your-own flower carts for weddings, bridal showers and parties across Miami and South Florida.",
+    "Olivella brings a pick-your-own flower cart and a Mediterranean charcuterie cart, hosted by our attendants, to weddings, showers and celebrations across Miami, Fort Lauderdale and the Palm Beaches.",
 
-  url: "https://www.olivellamiami.com",
+  // Canonical host. www.olivellamiami.com should 301 to this at the host/DNS level.
+  url: "https://olivellamiami.com",
+
+  // Legal name for the footer copyright. Replace with the business's legal
+  // name exactly as registered once the owner sends it.
+  legalName: "Olivella",
+
+  whatsappUrl: `https://wa.me/17865571878?text=${encodeURIComponent("Hi Olivella, I'd like to check a date.")}`,
 
   email: "olivellamiami@gmail.com",
   phoneDisplay: "(786) 557-1878",
@@ -26,20 +34,15 @@ export const site = {
 } as const;
 
 export const navLinks = [
-  { href: "/catering-services", label: "Services" },
+  { href: "/catering-services", label: "Experiences" },
   { href: "/locations", label: "Areas We Serve" },
   { href: "/faq", label: "FAQ" },
-  { href: "/about", label: "About Us" },
-  { href: "/contact", label: "Contact Us" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export const serviceDropdown = [
-  { href: "/flower-cart-miami", label: "Flower Cart Miami" },
-  { href: "/food-cart-miami", label: "Food Cart Miami" },
-  { href: "/olivella-signature-experience", label: "The Olivella Signature Experience" },
-] as const;
-
-export const aboutDropdown = [
-  { href: "/privacy-policy", label: "Privacy Policy" },
-  { href: "/terms-and-conditions", label: "Terms & Conditions" },
+  { href: "/flower-cart-miami", label: "Flower Cart" },
+  { href: "/food-cart-miami", label: "Charcuterie Cart" },
+  { href: "/olivella-signature-experience", label: "Signature Experience" },
 ] as const;

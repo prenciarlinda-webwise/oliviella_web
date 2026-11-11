@@ -1,15 +1,24 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { LeafSmall, FlowerBloom, OliveSprig } from "@/components/icons";
 import { site } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Olivella | Luxury Event Experiences in Miami",
+export const metadata = pageMetadata({
+  title: "About Olivella | Flower Cart & Charcuterie Cart Studio in Miami",
   description:
-    "Learn about Olivella — the Miami event studio behind luxury flower cart and charcuterie cart experiences for weddings, bridal showers, birthdays and corporate events across South Florida.",
-  alternates: { canonical: "/about" },
+    "Meet Olivella, a new Miami studio bringing a pick-your-own flower cart and a Mediterranean charcuterie cart to weddings, showers and celebrations across South Florida.",
+  path: "/about",
+});
+
+// Founder story — fill these in when the owner sends them. Until `name` is
+// set the page shows the studio paragraph instead; until `photo` is set (a
+// path under /public) the section is text only.
+const founder = {
+  name: "",
+  story: "", // 1–2 sentences: where she's from, why Mediterranean food and flowers matter to her.
+  photo: "",
 };
 
 const values = [
@@ -18,8 +27,8 @@ const values = [
     copy: "From the first bloom placed in the cart to the last cheese arrangement, every element is considered. We believe the details are what guests remember.",
   },
   {
-    title: "Fresh, locally sourced",
-    copy: "We source seasonal flowers and premium cheeses, produce and charcuterie fresh from Miami markets and South Florida growers for every event.",
+    title: "Imported cheeses, fresh stems",
+    copy: "Imported cheeses and charcuterie with fresh South Florida fruit and flowers, chosen for every event.",
   },
   {
     title: "Stress-free experience",
@@ -74,17 +83,25 @@ export default function AboutPage() {
 
       {/* Story */}
       <section className="py-16 sm:py-20">
-        <Container className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">
-          <div>
-            <Image
-              src="/images/flower-setup.jpeg"
-              alt="Olivella flowers and graze cart experience, beautifully curated"
-              width={1536}
-              height={1024}
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="w-full h-auto"
-            />
-          </div>
+        <Container
+          className={
+            founder.photo
+              ? "grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]"
+              : "max-w-3xl text-center"
+          }
+        >
+          {founder.photo && (
+            <div>
+              <Image
+                src={founder.photo}
+                alt={`${founder.name}, founder of ${site.name}`}
+                width={1200}
+                height={1500}
+                sizes="(max-width: 1024px) 100vw, 45vw"
+                className="h-auto w-full rounded-[2rem]"
+              />
+            </div>
+          )}
           <div>
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
               Who we are
@@ -92,19 +109,23 @@ export default function AboutPage() {
             <h2 className="mt-4 text-4xl text-olive-deep sm:text-5xl">
               A Miami charcuterie and flower cart studio
             </h2>
-            <p className="mt-5 text-lg leading-relaxed text-ink-soft">
-              {site.name} is a luxury event styling studio based in {site.city},
-              Florida, specializing in Mediterranean charcuterie carts and
-              interactive flower cart experiences. We were born from a love of
-              beautiful gatherings — the kind where every detail feels considered
-              and every guest feels celebrated.
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-ink-soft">
-              We build every charcuterie spread by hand and fill each flower cart
-              fresh on the morning of your event, serving bridal showers,
-              birthdays, baby showers, corporate events and intimate weddings
-              across {site.serviceArea}.
-            </p>
+            {founder.name ? (
+              <p className="mt-5 text-lg leading-relaxed text-ink-soft">
+                Hi, I&apos;m {founder.name}, the founder of {site.name}.{" "}
+                {founder.story} I started {site.name} to bring that feeling to
+                Miami celebrations: a flower cart your guests remember and a
+                table that invites them to linger. I personally design every
+                event and I&apos;m on site for every setup.
+              </p>
+            ) : (
+              <p className="mt-5 text-lg leading-relaxed text-ink-soft">
+                {site.name} is a new event studio in {site.city}, Florida,
+                bringing a pick-your-own flower cart and a Mediterranean
+                charcuterie cart to celebrations: a flower cart your guests
+                remember and a table that invites them to linger. Every event
+                is designed personally, and we&apos;re on site for every setup.
+              </p>
+            )}
             <div className="mt-7">
               <Button href="/catering-services" withArrow>
                 Explore our experiences
@@ -112,22 +133,6 @@ export default function AboutPage() {
             </div>
           </div>
         </Container>
-      </section>
-
-      {/* Full-width image break */}
-      <section className="relative w-full">
-        <Image
-          src="/images/flower-cart-events.jpeg"
-          alt="Full floral event setup styled by Olivella in Miami"
-          width={1448}
-          height={1086}
-          className="w-full h-auto block"
-        />
-        <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-olive-deep/60 via-transparent to-transparent pb-10">
-          <p className="font-display text-2xl text-cream drop-shadow sm:text-3xl">
-            Every detail, styled fresh for your event
-          </p>
-        </div>
       </section>
 
       {/* Values */}
@@ -196,12 +201,12 @@ export default function AboutPage() {
               Let&apos;s create something beautiful
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
-              Tell us about your event and we will send ideas and a custom
+              Tell us your date and guest count and we&apos;ll send your
               proposal within one business day.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Button href="/contact" withArrow>
-                Get in touch
+              <Button href="/book" withArrow>
+                Check your date
               </Button>
               <Button href="/catering-services" variant="secondary">
                 See our experiences

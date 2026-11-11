@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { FlowerBloom, OliveSprig, LeafSmall } from "@/components/icons";
-import { site } from "@/lib/site";
+import { BOOKING_PARAGRAPH } from "@/lib/products";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Frequently Asked Questions",
   description:
-    "Answers to common questions about Olivella's flower cart and charcuterie cart experiences in Miami — how they work, what's included, pricing, booking and more.",
-  alternates: { canonical: "/faq" },
-};
+    "How Olivella's flower cart and charcuterie cart work in Miami, what's included, travel fees, food allergies and how booking works. Experiences start at $1,500.",
+  path: "/faq",
+});
 
 type FaqItem = { q: string; a: string | string[] };
 type FaqGroup = { title: string; items: FaqItem[] };
@@ -24,7 +24,7 @@ const faqGroups: FaqGroup[] = [
       },
       {
         q: "What areas do you serve?",
-        a: "We currently serve Miami and surrounding South Florida areas. Travel fees may apply for locations outside our standard service area.",
+        a: "Miami-Dade, Broward and Palm Beach counties. Travel is free in Miami-Dade, $150 in Broward and $300 in Palm Beach County.",
       },
     ],
   },
@@ -36,20 +36,8 @@ const faqGroups: FaqGroup[] = [
         a: "Absolutely. The Flower Cart can be booked as a standalone experience or paired with our Charcuterie Cart for a complete Olivella experience.",
       },
       {
-        q: "How does the Flower Cart work?",
-        a: "Guests select flowers from a beautifully styled cart and create a bouquet to take home. The experience is interactive, elegant, and designed to leave guests with a meaningful keepsake from your event.",
-      },
-      {
-        q: "Can guests create their own bouquets?",
-        a: "Yes! Our Build-Your-Own Bouquet Experience allows guests to personally select and arrange their own bouquets from the flower selection available at your event.",
-      },
-      {
-        q: "Is bouquet assembly included?",
-        a: [
-          "You may choose between two experiences:",
-          "Build-Your-Own Bouquet Experience — Guests select and arrange their own bouquets.",
-          "Full-Service Bouquet Experience — Guests select their flowers, and an Olivella attendant professionally wraps and finishes each bouquet.",
-        ],
+        q: "How does the flower cart work?",
+        a: "Each guest chooses about 8 stems from the cart and an Olivella attendant wraps them into a bouquet to take home. An attendant is always included.",
       },
       {
         q: "How many stems are included in each bouquet?",
@@ -57,7 +45,7 @@ const faqGroups: FaqGroup[] = [
       },
       {
         q: "What flowers are included?",
-        a: "Flower selections vary based on season and availability and may include roses, spray roses, carnations, chrysanthemums, stock, alstroemeria, greenery, and other premium blooms.",
+        a: "Flower selections vary based on season and availability and may include roses, spray roses, stock, alstroemeria, greenery, and other premium blooms.",
       },
       {
         q: "Can I choose my event colors?",
@@ -72,7 +60,7 @@ const faqGroups: FaqGroup[] = [
           "Bouquet station setup",
           "Cart styling and décor",
           "Delivery, setup, and breakdown",
-          "Optional attendant service",
+          "On-site attendant",
         ],
       },
     ],
@@ -86,7 +74,7 @@ const faqGroups: FaqGroup[] = [
       },
       {
         q: "How does the Charcuterie Cart work?",
-        a: "Guests enjoy a beautifully displayed grazing experience featuring artisan cheeses, cured meats, fresh fruits, nuts, crackers, breads, and gourmet accompaniments.",
+        a: "Guests enjoy a Mediterranean charcuterie cart with imported cheeses and charcuterie, seasonal fruit, honey, bread and accompaniments, hosted by our attendant.",
       },
       {
         q: "Can dietary preferences be accommodated?",
@@ -94,7 +82,11 @@ const faqGroups: FaqGroup[] = [
       },
       {
         q: "Is an attendant included?",
-        a: "Yes. A professional Olivella attendant can assist with guest service, restocking, and maintaining the presentation throughout the event.",
+        a: "Yes. An on-site Olivella attendant is included to serve guests, restock and keep the presentation fresh throughout the event.",
+      },
+      {
+        q: "Can you handle food allergies?",
+        a: "Yes. Tell us about any allergies or dietary needs on the booking form. Every item on the cart is labeled, and we can prepare nut-free or vegetarian options. Because everything is prepared in the same space, we can't promise any item is completely allergen-free.",
       },
     ],
   },
@@ -103,7 +95,7 @@ const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Can I combine the Flower Cart and Charcuterie Cart?",
-        a: "Absolutely. Many clients choose both experiences to create a unique and elevated event for their guests.",
+        a: "Yes. The Olivella Signature Experience pairs both carts in one color story and costs about 10% less than booking them separately.",
       },
       {
         q: "Do you offer custom branding for corporate events?",
@@ -119,7 +111,7 @@ const faqGroups: FaqGroup[] = [
       },
       {
         q: "Do you require a deposit?",
-        a: "Yes. A non-refundable retainer is required to secure your event date. The remaining balance is due before the event.",
+        a: BOOKING_PARAGRAPH,
       },
       {
         q: "What happens if my guest count changes?",
@@ -134,12 +126,12 @@ const faqGroups: FaqGroup[] = [
         a: "We recommend a covered area or weather backup plan for outdoor events. Our team will work with you to ensure the best setup possible.",
       },
       {
-        q: "Can I see photos of previous events before booking?",
-        a: "Of course. We would be happy to share our portfolio and inspiration gallery so you can explore past Olivella experiences and find inspiration for your event.",
+        q: "Can I see photos before booking?",
+        a: "Olivella is a new studio opening this season. We're happy to share photos of our styled setups and a sample proposal so you can see exactly what we create.",
       },
       {
         q: "How do I book?",
-        a: "Simply submit an inquiry through our website with your event date, location, estimated guest count, and preferred service. We will contact you to discuss availability, customization options, and provide a personalized proposal.",
+        a: BOOKING_PARAGRAPH,
       },
     ],
   },
@@ -181,9 +173,33 @@ function FaqGroup({ group }: { group: FaqGroup }) {
   );
 }
 
+// FAQPage structured data, built from the same questions shown on the page.
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqGroups.flatMap((group) =>
+    group.items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: Array.isArray(item.a)
+          ? `${item.a[0]} ${item.a.slice(1).join("; ")}.`
+          : item.a,
+      },
+    })),
+  ),
+};
+
 export default function FaqPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden py-20 sm:py-28">
         <div
@@ -236,8 +252,8 @@ export default function FaqPage() {
               beautiful together.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Button href="/contact" withArrow>
-                Get in touch
+              <Button href="/book" withArrow>
+                Check your date
               </Button>
               <Button href="/catering-services" variant="secondary">
                 Explore our experiences

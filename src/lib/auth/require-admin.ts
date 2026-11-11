@@ -6,6 +6,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { SESSION_COOKIE_NAME, verifySessionCookie } from "@/lib/auth/session";
 import { findAdminById, type AdminRole } from "@/lib/auth/admins-store";
+import { isSameOrigin } from "@/lib/request";
 
 export type AdminIdentity = {
   id: string;
@@ -61,6 +62,14 @@ export async function requireAdminApi(
   req: NextRequest,
   opts?: { role?: AdminRole },
 ): Promise<AdminApiResult> {
+  // CSRF defense in depth (the SameSite=Lax cookie is the first layer): every
+  // state-changing admin call must come from our own pages.
+  if (req.method !== "GET" && req.method !== "HEAD" && !isSameOrigin(req)) {
+    return {
+      ok: false,
+      response: NextResponse.json({ error: "Invalid origin." }, { status: 403 }),
+    };
+  }
   const admin = await resolveIdentity(req.cookies.get(SESSION_COOKIE_NAME)?.value);
   if (!admin) {
     return {

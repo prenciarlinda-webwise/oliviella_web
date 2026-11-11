@@ -1,21 +1,30 @@
-import type { Metadata } from "next";
+import Link from "next/link";
 import Container from "@/components/Container";
-import ContactForm from "@/components/ContactForm";
+import InquiryForm from "@/components/InquiryForm";
 import {
   MailIcon,
   PhoneIcon,
   InstagramIcon,
   PinIcon,
   FlowerBloom,
+  WhatsAppIcon,
 } from "@/components/icons";
 import { site } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact for a Miami Charcuterie or Flower Cart Quote",
+export const metadata = pageMetadata({
+  title: "Contact Olivella | Check Your Date",
   description:
-    "Contact Olivella for a charcuterie or flower cart quote in Miami and South Florida. Tell us about your event and we reply within one business day.",
-  alternates: { canonical: "/contact" },
-};
+    "Contact Olivella to check your date for a flower cart or charcuterie cart in Miami, Fort Lauderdale or the Palm Beaches. Free, about one minute; we reply within one business day.",
+  path: "/contact",
+});
+
+export const dynamic = "force-dynamic";
+
+function today(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
 
 const details = [
   {
@@ -31,6 +40,12 @@ const details = [
     href: `tel:${site.phoneHref}`,
   },
   {
+    icon: WhatsAppIcon,
+    label: "WhatsApp",
+    value: site.phoneDisplay,
+    href: site.whatsappUrl,
+  },
+  {
     icon: InstagramIcon,
     label: "Instagram",
     value: `@${site.instagramHandle}`,
@@ -44,44 +59,13 @@ const details = [
   },
 ];
 
-const serviceAreas = [
-  {
-    title: "Primary service areas",
-    copy: "Our core Miami neighborhoods, with priority scheduling and same-day styling.",
-    cities: [
-      "Coral Gables",
-      "Coconut Grove",
-      "Brickell",
-      "Key Biscayne",
-      "South Miami",
-      "Pinecrest",
-      "Coral Way",
-      "Downtown Miami",
-      "The Roads",
-      "Shenandoah",
-    ],
-  },
-  {
-    title: "Extended service areas",
-    copy: "From the beaches up through Broward and the Palm Beaches.",
-    cities: [
-      "Miami Beach",
-      "Bal Harbour",
-      "Surfside",
-      "Bay Harbor Islands",
-      "Sunny Isles Beach",
-      "Aventura",
-      "Doral",
-      "Weston",
-      "Fort Lauderdale",
-      "Boca Raton",
-      "Delray Beach",
-      "Palm Beach",
-    ],
-  },
-];
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ experience?: string }>;
+}) {
+  const { experience } = await searchParams;
 
-export default function ContactPage() {
   return (
     <>
     <section className="relative overflow-hidden py-20 sm:py-24">
@@ -99,17 +83,16 @@ export default function ContactPage() {
             Say hello
           </span>
           <h1 className="mt-5 text-balance text-5xl text-olive-deep sm:text-6xl">
-            Get a Miami charcuterie or flower cart quote
+            Check your date
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-ink-soft">
-            Tell us about your event and we will send ideas and a quote for your
-            charcuterie or flower cart. We usually reply
-            within one business day.
+            Three short steps, about one minute, and it&apos;s free. We send
+            your proposal within one business day.
           </p>
         </div>
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-          <ContactForm />
+          <InquiryForm initialExperience={experience} minDate={today()} source="contact" />
 
           <aside className="flex flex-col gap-6">
             <div className="rounded-3xl bg-olive-mist/40 p-7 ring-1 ring-white/60">
@@ -178,59 +161,15 @@ export default function ContactPage() {
     </section>
 
     {/* Areas we serve */}
-    <section className="bg-cream-deep/40 py-20 sm:py-24">
-      <Container>
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
-            Areas we serve
-          </span>
-          <h2 className="mt-4 text-4xl text-olive-deep sm:text-5xl">
-            Luxury florals and charcuterie across South Florida
-          </h2>
-          <p className="mt-4 text-lg text-ink-soft">
-            {site.name} brings charcuterie carts and pick-your-own flower carts
-            directly to your celebration, from Miami to the Palm Beaches.
-          </p>
-        </div>
-
-        <div className="mt-14 grid gap-7 md:grid-cols-2">
-          {serviceAreas.map((group) => (
-            <div
-              key={group.title}
-              className="rounded-[2rem] bg-white/60 p-8 ring-1 ring-white/60 sm:p-10"
-            >
-              <h3 className="font-display text-2xl text-olive-deep">
-                {group.title}
-              </h3>
-              <p className="mt-2 text-sm text-ink-soft">{group.copy}</p>
-              <ul className="mt-6 flex flex-wrap gap-2.5">
-                {group.cities.map((city) => (
-                  <li
-                    key={city}
-                    className="rounded-full bg-olive-mist/50 px-4 py-1.5 text-sm text-olive-deep ring-1 ring-white/60"
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-7 flex items-start gap-4 rounded-[2rem] bg-gradient-to-br from-blush-soft to-cream p-8 ring-1 ring-white/60 sm:p-10">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/70 text-olive">
-            <PinIcon className="h-5 w-5" />
-          </span>
-          <div>
-            <h3 className="font-display text-2xl text-olive-deep">
-              Destination events
-            </h3>
-            <p className="mt-2 text-ink-soft">
-              Planning something beyond South Florida? We are available for
-              destination celebrations and custom experiences upon request.
-            </p>
-          </div>
-        </div>
+    <section className="bg-cream-deep/40 py-14">
+      <Container className="flex items-center justify-center gap-3 text-center">
+        <PinIcon className="h-5 w-5 shrink-0 text-olive" />
+        <Link
+          href="/locations"
+          className="font-semibold text-olive-deep underline underline-offset-4 hover:text-olive"
+        >
+          See the areas we serve
+        </Link>
       </Container>
     </section>
     </>

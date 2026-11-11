@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { requireAdminApi } from "@/lib/auth/require-admin";
-import { readAdmins, writeAdmins, type AdminRole } from "@/lib/auth/admins-store";
+import { mutateAdmins, type AdminRole } from "@/lib/auth/admins-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -40,22 +40,28 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid role." }, { status: 422 });
   }
 
-  const admins = await readAdmins();
-  const index = admins.findIndex((a) => a.id === id);
-  if (index === -1) {
+  // Lookup, last-system-admin check and write happen under one lock, so two
+  // system admins demoting each other at the same moment can't leave zero.
+  const outcome = await mutateAdmins((admins) => {
+    const index = admins.findIndex((a) => a.id === id);
+    if (index === -1) return { next: null, result: "not-found" as const };
+    const target = admins[index]!;
+    if (target.role === "system" && role === "shop" && countOtherSystemAdmins(admins, id) === 0) {
+      return { next: null, result: "last-system" as const };
+    }
+    admins[index] = { ...target, role, updatedAt: new Date().toISOString() };
+    return { next: admins, result: "ok" as const };
+  });
+
+  if (outcome === "not-found") {
     return NextResponse.json({ error: "Admin not found." }, { status: 404 });
   }
-
-  const target = admins[index]!;
-  if (target.role === "system" && role === "shop" && countOtherSystemAdmins(admins, id) === 0) {
+  if (outcome === "last-system") {
     return NextResponse.json(
       { error: "Can't demote the last system admin." },
       { status: 409 },
     );
   }
-
-  admins[index] = { ...target, role, updatedAt: new Date().toISOString() };
-  await writeAdmins(admins);
 
   return NextResponse.json({ ok: true });
 }
@@ -72,19 +78,24 @@ export async function DELETE(
     return NextResponse.json({ error: "You can't remove yourself." }, { status: 400 });
   }
 
-  const admins = await readAdmins();
-  const target = admins.find((a) => a.id === id);
-  if (!target) {
+  const outcome = await mutateAdmins((admins) => {
+    const target = admins.find((a) => a.id === id);
+    if (!target) return { next: null, result: "not-found" as const };
+    if (target.role === "system" && countOtherSystemAdmins(admins, id) === 0) {
+      return { next: null, result: "last-system" as const };
+    }
+    return { next: admins.filter((a) => a.id !== id), result: "ok" as const };
+  });
+
+  if (outcome === "not-found") {
     return NextResponse.json({ error: "Admin not found." }, { status: 404 });
   }
-  if (target.role === "system" && countOtherSystemAdmins(admins, id) === 0) {
+  if (outcome === "last-system") {
     return NextResponse.json(
       { error: "Can't remove the last system admin." },
       { status: 409 },
     );
   }
-
-  await writeAdmins(admins.filter((a) => a.id !== id));
 
   return NextResponse.json({ ok: true });
 }

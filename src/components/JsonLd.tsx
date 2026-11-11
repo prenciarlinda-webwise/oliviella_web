@@ -13,55 +13,53 @@ export default function JsonLd() {
     description: site.description,
     url: site.url,
     email: site.email,
-    telephone: site.phoneDisplay,
+    telephone: "+1-786-557-1878",
     image: `${site.url}/opengraph-image`,
-    priceRange: "$$",
+    priceRange: "$$$",
     address: {
       "@type": "PostalAddress",
       addressLocality: site.city,
       addressRegion: site.region,
       addressCountry: "US",
     },
-    areaServed: {
-      "@type": "City",
-      name: site.city,
-    },
+    areaServed: [
+      { "@type": "AdministrativeArea", name: "Miami-Dade County, FL" },
+      { "@type": "AdministrativeArea", name: "Broward County, FL" },
+      { "@type": "AdministrativeArea", name: "Palm Beach County, FL" },
+    ],
     sameAs: [site.instagramUrl],
     makesOffer: [
       {
         "@type": "Offer",
+        url: `${site.url}/flower-cart-miami`,
+        priceSpecification: { "@type": "PriceSpecification", minPrice: 1500, priceCurrency: "USD" },
         itemOffered: {
           "@type": "Service",
-          name: "The Riviera Bloom Cart — Flower Cart Miami",
+          name: "The Flower Cart Experience",
           description:
-            "A luxury flower cart experience where guests receive hand-wrapped bouquets curated with premium seasonal blooms and signature Olivella styling.",
+            "An interactive flower cart: each guest chooses their stems and our attendant wraps a bouquet for them to take home.",
         },
       },
       {
         "@type": "Offer",
+        url: `${site.url}/food-cart-miami`,
+        priceSpecification: { "@type": "PriceSpecification", minPrice: 1500, priceCurrency: "USD" },
         itemOffered: {
           "@type": "Service",
-          name: "The Mediterranean Table Cart — Food Cart Miami",
+          name: "The Charcuterie Cart Experience",
           description:
-            "An elevated grazing cart inspired by the Mediterranean coast, featuring premium imported cheeses, artisanal charcuterie, fresh fruits, honey, breads, and beautifully styled presentation.",
+            "A Mediterranean charcuterie cart with imported cheeses and charcuterie, seasonal fruit, honey and bread, hosted by our attendant.",
         },
       },
       {
         "@type": "Offer",
+        url: `${site.url}/olivella-signature-experience`,
+        priceSpecification: { "@type": "PriceSpecification", minPrice: 2700, priceCurrency: "USD" },
         itemOffered: {
           "@type": "Service",
-          name: "The Olivella Signature Experience",
+          name: "The Signature Experience",
           description:
-            "Our signature immersive experience blending floral artistry and Mediterranean grazing into one beautifully curated event centerpiece.",
-        },
-      },
-      {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "The Riviera Bouquet Bar",
-          description:
-            "Individual hand-wrapped bouquets perfect for guest favors, intimate gatherings, pop-ups and luxury gifting.",
+            "The flower cart and the Mediterranean charcuterie cart together, styled in one color story.",
         },
       },
     ],

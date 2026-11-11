@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { site } from "@/lib/site";
 
 const GTM_ID = "GTM-5J9VLXHM";
@@ -34,34 +35,17 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | Food And Flower Cart in Miami`,
+    default: `Flower Cart & Charcuterie Cart in Miami | ${site.name}`,
     template: `%s | ${site.name}`,
   },
   description: site.description,
-  keywords: [
-    "charcuterie Miami",
-    "charcuterie cart Miami",
-    "flower cart Miami",
-    "charcuterie board Miami",
-    "charcuterie catering Miami",
-    "event styling Miami",
-    "bridal shower charcuterie",
-    "wedding flower cart",
-    "flower cart South Florida",
-  ],
   authors: [{ name: site.name }],
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: site.url,
     siteName: site.name,
-    title: `${site.name} | Food And Flower Cart in Miami`,
-    description: site.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} | Food And Flower Cart in Miami`,
+    title: `Flower Cart & Charcuterie Cart in Miami | ${site.name}`,
     description: site.description,
   },
   robots: {
@@ -97,6 +81,7 @@ export default async function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <WhatsAppButton />
       </body>
       <Script
         id="gtm-init"

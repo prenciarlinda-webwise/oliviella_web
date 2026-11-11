@@ -30,3 +30,24 @@ export async function atomicWriteJson(filePath: string, data: unknown): Promise<
   await fs.writeFile(tmp, JSON.stringify(data, null, 2), "utf8");
   await fs.rename(tmp, filePath);
 }
+
+/** Result of a read-modify-write: `next` is written (null = no change). */
+export type Mutation<T, R> = { next: T | null; result: R };
+
+/**
+ * Read, modify and write a JSON file as ONE locked step, so two concurrent
+ * admin saves can't both read the old state and overwrite each other (and a
+ * check like "is this the last system admin?" can't be raced).
+ */
+export function mutateJson<T, R>(
+  key: string,
+  read: () => Promise<T>,
+  filePath: string,
+  fn: (current: T) => Mutation<T, R> | Promise<Mutation<T, R>>,
+): Promise<R> {
+  return withFileLock(key, async () => {
+    const { next, result } = await fn(await read());
+    if (next !== null) await atomicWriteJson(filePath, next);
+    return result;
+  });
+}

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { requireAdminApi } from "@/lib/auth/require-admin";
-import { getStripe } from "@/lib/stripe";
+import { getStripe, isStripeConfigured } from "@/lib/stripe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,13 +19,33 @@ export async function POST(
   const auth = await requireAdminApi(req);
   if (!auth.ok) return auth.response;
 
+  if (!isStripeConfigured()) {
+    return NextResponse.json({ error: "Stripe isn't configured on this server." }, { status: 503 });
+  }
+
   const { id } = await params;
   if (!PI_ID_RE.test(id)) {
     return NextResponse.json({ error: "Invalid booking id." }, { status: 400 });
   }
 
   try {
-    await getStripe().paymentIntents.capture(id);
+    const stripe = getStripe();
+    const pi = await stripe.paymentIntents.retrieve(id);
+    if (!pi.metadata.experienceSlug) {
+      return NextResponse.json({ error: "That payment isn't a website booking." }, { status: 404 });
+    }
+    if (pi.status !== "requires_capture") {
+      return NextResponse.json(
+        {
+          error:
+            pi.status === "canceled"
+              ? "This hold has expired or was cancelled, so it can't be captured."
+              : "This deposit has already been captured.",
+        },
+        { status: 409 },
+      );
+    }
+    await stripe.paymentIntents.capture(id, {}, { idempotencyKey: `capture:${id}` });
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[admin/capture] Failed to capture", id, err);

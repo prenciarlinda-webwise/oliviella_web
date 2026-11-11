@@ -4,29 +4,13 @@ import { findAdminByEmail } from "@/lib/auth/admins-store";
 import { DUMMY_PASSWORD_HASH, verifyPassword } from "@/lib/auth/password";
 import { SESSION_COOKIE_NAME, SESSION_MAX_AGE_SEC, signSessionCookie } from "@/lib/auth/session";
 import { rateLimit } from "@/lib/rate-limit";
+import { clientIp, isSameOrigin } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_BODY_BYTES = 4 * 1024;
 const GENERIC_ERROR = "Invalid email or password.";
-
-function clientIp(req: NextRequest): string {
-  const xff = req.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0]!.trim();
-  return req.headers.get("x-real-ip")?.trim() || "unknown";
-}
-
-function isSameOrigin(req: NextRequest): boolean {
-  const origin = req.headers.get("origin");
-  const host = req.headers.get("host");
-  if (!origin || !host) return false;
-  try {
-    return new URL(origin).host === host;
-  } catch {
-    return false;
-  }
-}
 
 export async function POST(req: NextRequest) {
   if (!isSameOrigin(req)) {
@@ -79,8 +63,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: GENERIC_ERROR }, { status: 401 });
   }
 
+  let cookieValue: string;
+  try {
+    cookieValue = signSessionCookie(admin.id);
+  } catch (err) {
+    console.error("[admin/login]", err);
+    return NextResponse.json(
+      { error: "Admin login isn't configured on this server." },
+      { status: 503 },
+    );
+  }
+
   const response = NextResponse.json({ ok: true });
-  response.cookies.set(SESSION_COOKIE_NAME, signSessionCookie(admin.id), {
+  response.cookies.set(SESSION_COOKIE_NAME, cookieValue, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

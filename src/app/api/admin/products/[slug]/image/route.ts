@@ -5,14 +5,13 @@ import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { requireAdminApi } from "@/lib/auth/require-admin";
-import { readExperiences, writeExperiences } from "@/lib/products-data";
+import { mutateExperiences, readExperiences } from "@/lib/products-data";
+import { UPLOAD_DIR, UPLOAD_URL_PREFIX, uploadPathForUrl } from "@/lib/uploads";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
-const UPLOAD_DIR = path.join(process.cwd(), "public", "images", "uploads");
-const UPLOAD_URL_PREFIX = "/images/uploads/";
 
 /**
  * Sniff magic bytes rather than trusting the client-supplied MIME type
@@ -39,9 +38,13 @@ export async function POST(
 
   const { slug } = await params;
 
-  const experiences = await readExperiences();
-  const index = experiences.findIndex((e) => e.slug === slug);
-  if (index === -1) {
+  // Reject oversized bodies before buffering them (multipart adds a little overhead).
+  const declared = Number(req.headers.get("content-length") ?? "0");
+  if (declared > MAX_FILE_BYTES + 64 * 1024) {
+    return NextResponse.json({ error: "Image must be under 8MB." }, { status: 413 });
+  }
+
+  if (!(await readExperiences()).some((e) => e.slug === slug)) {
     return NextResponse.json({ error: "Product not found." }, { status: 404 });
   }
 
@@ -74,20 +77,22 @@ export async function POST(
   await fs.writeFile(path.join(UPLOAD_DIR, filename), bytes);
 
   const newImagePath = `${UPLOAD_URL_PREFIX}${filename}`;
-  const previousImagePath = experiences[index]!.image;
 
-  experiences[index] = { ...experiences[index]!, image: newImagePath };
-  await writeExperiences(experiences);
+  const previousImagePath = await mutateExperiences((experiences) => {
+    const index = experiences.findIndex((e) => e.slug === slug);
+    if (index === -1) return { next: null, result: null };
+    const previous = experiences[index]!.image;
+    experiences[index] = { ...experiences[index]!, image: newImagePath };
+    return { next: experiences, result: previous };
+  });
+  if (previousImagePath === null) {
+    await fs.unlink(path.join(UPLOAD_DIR, filename)).catch(() => {});
+    return NextResponse.json({ error: "Product not found." }, { status: 404 });
+  }
 
-  // Only clean up files this same endpoint previously wrote — never delete
-  // the original shipped assets under /images/*, even if a stale record
-  // pointed there.
-  if (previousImagePath.startsWith(UPLOAD_URL_PREFIX)) {
-    const previousFile = path.join(
-      process.cwd(),
-      "public",
-      previousImagePath.replace(/^\//, ""),
-    );
+  // Only clean up files this endpoint wrote — never the shipped /images/* assets.
+  const previousFile = uploadPathForUrl(previousImagePath);
+  if (previousFile) {
     fs.unlink(previousFile).catch((err) => {
       console.error("[admin/products/image] Failed to clean up old image", previousFile, err);
     });

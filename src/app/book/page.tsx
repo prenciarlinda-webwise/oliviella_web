@@ -1,18 +1,22 @@
-import type { Metadata } from "next";
 import Container from "@/components/Container";
-import BookingForm from "@/components/BookingForm";
-import { bookingWindow, formatDeposit } from "@/lib/booking";
-import { getBookableExperiences } from "@/lib/products-data";
+import InquiryForm from "@/components/InquiryForm";
+import { BOOKING_PARAGRAPH } from "@/lib/products";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Book Your Experience",
+export const metadata = pageMetadata({
+  title: "Check Your Date",
   description:
-    "Reserve your Olivella experience online. Tell us your event date and guest count, hold your date with a deposit and we will send a custom proposal within one business day.",
-  alternates: { canonical: "/book" },
+    "Check your date for a flower cart or charcuterie cart in Miami. It's free and takes about a minute; we send your proposal within one business day.",
+  path: "/book",
   robots: { index: false, follow: true },
-};
+});
 
 export const dynamic = "force-dynamic";
+
+function today(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
 
 export default async function BookPage({
   searchParams,
@@ -20,36 +24,24 @@ export default async function BookPage({
   searchParams: Promise<{ experience?: string }>;
 }) {
   const { experience } = await searchParams;
-  const { minDate, maxDate } = bookingWindow();
-  const deposit = formatDeposit();
-  const experiences = await getBookableExperiences();
 
   return (
     <section className="py-16 sm:py-20">
       <Container className="max-w-3xl">
         <div className="text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
-            Book your experience
+            Free date check
           </span>
           <h1 className="mx-auto mt-4 max-w-2xl text-balance text-4xl text-olive-deep sm:text-5xl">
-            Tell us about your event
+            Check your date
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
-            Choose your experience, customize it to your event and reserve
-            your date with a <span className="font-semibold">{deposit}</span>{" "}
-            deposit hold. We confirm availability before it&apos;s charged,
-            then follow up with your custom proposal within one business day.
+            {BOOKING_PARAGRAPH}
           </p>
         </div>
 
         <div className="mt-10">
-          <BookingForm
-            minDate={minDate}
-            maxDate={maxDate}
-            initialSlug={experience}
-            depositFormatted={deposit}
-            experiences={experiences}
-          />
+          <InquiryForm initialExperience={experience} minDate={today()} source="book" />
         </div>
       </Container>
     </section>

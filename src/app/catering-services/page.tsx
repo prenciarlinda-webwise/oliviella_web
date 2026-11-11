@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { OliveSprig, FlowerBloom, LeafSmall } from "@/components/icons";
-import { addOns, formatTierPrice, isBookableSlug, type Experience } from "@/lib/products";
+import PriceTable from "@/components/PriceTable";
+import { addOns, priceNotes, type Experience } from "@/lib/products";
+import { pageMetadata } from "@/lib/seo";
 import { readExperiences } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Food &amp; Flower Cart Experiences in Miami",
+export const metadata = pageMetadata({
+  title: "Charcuterie & Flower Cart Experiences in Miami",
   description:
-    "The Olivella Experiences — a Mediterranean charcuterie cart and a luxury flower cart for Miami weddings, showers and events. Explore what's included, pricing and how to book.",
-  alternates: { canonical: "/catering-services" },
-};
+    "The Flower Cart Experience and The Charcuterie Cart Experience start at $1,500; The Signature Experience (both carts) starts at $2,700. See what's included and check your date.",
+  path: "/catering-services",
+});
 
 const accentText = {
   olive: "text-olive",
@@ -36,37 +37,6 @@ const steps = [
     copy: "We arrive early, style everything on site and clear it all away once the last guest has gone.",
   },
 ];
-
-function PriceTable({ experience }: { experience: Experience }) {
-  const { pricing } = experience;
-  const heading = pricing.kind === "bouquets" ? "Bouquet Options" : "Starting Investment";
-
-  return (
-    <div className="mt-7 rounded-2xl bg-white/70 p-6 ring-1 ring-olive-mist">
-      <p
-        className={`text-sm font-semibold uppercase tracking-[0.12em] ${accentText[experience.accent]}`}
-      >
-        {heading}
-      </p>
-      <dl className="mt-4 divide-y divide-olive-mist/70">
-        {pricing.tiers.map((tier) => (
-          <div
-            key={tier.id}
-            className="flex items-baseline justify-between gap-4 py-2.5"
-          >
-            <dt className="text-ink-soft">{tier.label}</dt>
-            <dd className="text-right font-display text-xl text-olive-deep">
-              {formatTierPrice(tier)}
-            </dd>
-          </div>
-        ))}
-      </dl>
-      {pricing.note && (
-        <p className="mt-4 text-sm italic text-ink-soft">{pricing.note}</p>
-      )}
-    </div>
-  );
-}
 
 function ExperienceSection({
   experience,
@@ -122,18 +92,21 @@ function ExperienceSection({
             ))}
           </ul>
 
-          <PriceTable experience={experience} />
+          <PriceTable experience={experience}>
+            {priceNotes(experience.slug).map((line) => (
+              <p
+                key={line}
+                className={line.startsWith("Save") ? "font-semibold text-berry" : ""}
+              >
+                {line}
+              </p>
+            ))}
+          </PriceTable>
 
           <div className="mt-7">
-            {isBookableSlug(experience.slug) ? (
-              <Button href={`/book?experience=${experience.slug}`} withArrow>
-                Book this experience
-              </Button>
-            ) : (
-              <Button href="/contact" withArrow>
-                Request a quote
-              </Button>
-            )}
+            <Button href={`/book?experience=${experience.slug}`} withArrow>
+              Check your date
+            </Button>
           </div>
         </div>
       </Container>
@@ -201,20 +174,21 @@ export default async function CateringServicesPage() {
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
-              Signature Add-Ons
+              Add-ons
             </span>
             <h2 className="mt-4 text-4xl text-olive-deep sm:text-5xl">
               Enhance your experience
             </h2>
           </div>
-          <div className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto mt-12 grid max-w-4xl gap-4 md:grid-cols-3">
             {addOns.map((addOn) => (
               <div
-                key={addOn}
-                className="flex items-center gap-3 rounded-2xl bg-white/60 p-5 ring-1 ring-olive-mist"
+                key={addOn.name}
+                className="flex flex-col gap-3 rounded-2xl bg-white/60 p-6 ring-1 ring-olive-mist"
               >
                 <FlowerBloom className="h-6 w-6 shrink-0 text-rose" />
-                <span className="text-ink-soft">{addOn}</span>
+                <span className="text-ink">{addOn.name}</span>
+                <span className="font-display text-xl text-olive-deep">{addOn.price}</span>
               </div>
             ))}
           </div>
@@ -259,8 +233,8 @@ export default async function CateringServicesPage() {
               Reserve your Olivella experience
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
-              Tell us your date and guest count, and we will send a curated
-              proposal for your celebration in {site.serviceArea}.
+              Tell us your date and guest count, and we&apos;ll send a proposal
+              within one business day.
             </p>
             <div className="mt-8 flex justify-center">
               <Button href="/book" variant="secondary" withArrow>

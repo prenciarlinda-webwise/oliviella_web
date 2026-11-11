@@ -5,6 +5,11 @@ import { site } from "@/lib/site";
 
 // Compact footer email capture. Same Formspree AJAX path as the contact form
 // (cross-origin fetch — the CSP blocks a native `action=` post).
+//
+// TODO(launch): connect this to the owner's email tool (Mailchimp, Flodesk or
+// Klaviyo) so it sends the automatic OLIVELLA5 welcome email. Until then the
+// sign-up only reaches the shared inbox via Formspree. Remember to add the
+// tool's domain to `connect-src` in src/proxy.ts.
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -37,7 +42,7 @@ export default function NewsletterForm() {
   if (status === "success") {
     return (
       <p className="text-sm font-medium text-blush">
-        You&apos;re on the list &mdash; talk soon.
+        Welcome! Check your inbox for your 5% code.
       </p>
     );
   }
@@ -61,12 +66,12 @@ export default function NewsletterForm() {
           disabled={status === "submitting"}
           className="shrink-0 rounded-full bg-cream px-6 py-3 text-sm font-semibold uppercase tracking-[0.1em] text-olive-deep transition-colors hover:bg-blush-soft disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {status === "submitting" ? "…" : "Join"}
+          {status === "submitting" ? "…" : "Get 5% off"}
         </button>
       </div>
 
       {/* Distinguish newsletter signups in the shared inbox + spam honeypot. */}
-      <input type="hidden" name="_subject" value="Newsletter signup — Olivella" />
+      <input type="hidden" name="_subject" value="Newsletter signup (OLIVELLA5) — Olivella" />
       <input type="hidden" name="source" value="footer-newsletter" />
       <input
         type="text"

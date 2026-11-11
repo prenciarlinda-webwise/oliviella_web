@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Container from "@/components/Container";
 import { site } from "@/lib/site";
+import { BOOKING_PARAGRAPH } from "@/lib/products";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Service",
-  description: `Terms of service for ${site.name} event experiences in Miami, Florida.`,
-  alternates: { canonical: "/terms-and-conditions" },
-  robots: { index: true, follow: true },
-};
+export const metadata = pageMetadata({
+  title: "Terms and Conditions",
+  description: `Terms for booking ${site.name} flower cart and charcuterie cart experiences in Miami, Florida.`,
+  path: "/terms-and-conditions",
+});
 
-const EFFECTIVE_DATE = "June 20, 2025";
+const LAST_UPDATED = "November 2026";
 
 export default function TermsPage() {
   return (
@@ -19,76 +19,94 @@ export default function TermsPage() {
           Legal
         </span>
         <h1 className="mt-4 text-4xl text-olive-deep sm:text-5xl">
-          Terms of Service
+          Terms and Conditions
         </h1>
         <p className="mt-4 text-sm text-ink-soft">
-          Effective date: {EFFECTIVE_DATE}
+          Last updated: {LAST_UPDATED}
         </p>
 
         <div className="prose prose-sm mt-10 max-w-none text-ink-soft [&_a]:text-olive [&_a]:underline [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-display [&_h2]:font-medium [&_h2]:text-olive-deep [&_h3]:mt-6 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-ink [&_p]:mt-4 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul_li]:mt-1">
 
           <p>
-            Please read these Terms of Service (&ldquo;Terms&rdquo;) carefully
+            Please read these Terms and Conditions (&ldquo;Terms&rdquo;) carefully
             before booking or using any services offered by {site.name}
             (&ldquo;we,&rdquo; &ldquo;us&rdquo; or &ldquo;our&rdquo;). By
-            submitting an inquiry, paying a deposit, or entering into a service
+            submitting a form, paying a retainer, or entering into a service
             agreement with us, you agree to be bound by these Terms.
           </p>
 
           <h2>1. Services</h2>
           <p>
-            {site.name} provides luxury event experiences including but not
-            limited to: flower cart experiences, Mediterranean grazing cart
-            experiences, the Olivella Signature Experience, and individual
-            bouquet services for events across {site.serviceArea}. All pricing listed on
-            this website is a &ldquo;starting at&rdquo; figure; final pricing is
-            confirmed in your customized proposal.
+            {site.name} provides event experiences including The Flower Cart
+            Experience, The Charcuterie Cart Experience and The Signature
+            Experience (both carts together) for events across{" "}
+            {site.serviceArea}.
           </p>
 
           <h2>2. Inquiries and Proposals</h2>
           <p>
             Submitting an inquiry through our contact form does not constitute a
             booking or reservation. Your date is not held until a signed service
-            agreement and deposit payment are received. We will respond to
+            agreement and retainer payment are received. We will respond to
             inquiries within one business day with a customized proposal.
           </p>
 
-          <h2>3. Booking Deposit</h2>
+          <h2>3. Booking</h2>
+          <p>{BOOKING_PARAGRAPH}</p>
+
+          <h2>4. Prices</h2>
           <p>
-            A non-refundable booking deposit is required to reserve your event
-            date. The deposit amount will be specified in your proposal. The
-            deposit is applied toward your total invoice. Dates are reserved on a
-            first-come, first-served basis; submitting an inquiry does not hold
-            your date.
+            Website prices are starting prices. Your signed proposal is the
+            final price. Florida sales tax is added.
           </p>
 
-          <h2>4. Cancellations and Refunds</h2>
-          <ul>
-            <li>
-              <strong>Cancellations by client:</strong> Booking deposits are
-              non-refundable. If you cancel more than 30 days before your event
-              date, you may apply the deposit credit toward a rescheduled date
-              within 12 months, subject to availability. Cancellations within 30
-              days of the event date forfeit the deposit with no credit.
-            </li>
-            <li>
-              <strong>Cancellations by {site.name}:</strong> In the unlikely
-              event we must cancel due to circumstances beyond our control (force
-              majeure, illness, emergency), we will provide a full refund of all
-              amounts paid or offer to reschedule at no additional charge.
-            </li>
-          </ul>
-
-          <h2>5. Rescheduling</h2>
+          <h2>5. Changes and Cancellations</h2>
           <p>
-            Requests to reschedule must be made at least 14 days before the
-            original event date. Rescheduling is subject to availability and may
-            be subject to a rescheduling fee as outlined in your service
-            agreement. We cannot guarantee the same pricing for a rescheduled
-            date if pricing has changed.
+            One free date change if you ask at least 30 days before your event
+            and the new date is open; your retainer moves to the new date. If
+            you cancel, the retainer is not refunded. Payments made within 14
+            days of the event are not refunded.
+          </p>
+          <p>
+            If {site.name} must cancel due to circumstances beyond our control
+            (force majeure, illness, emergency), we will refund all amounts paid
+            or offer to reschedule at no additional charge.
           </p>
 
-          <h2>6. Client Responsibilities</h2>
+          <h2>6. Food Allergies</h2>
+          <p>
+            Our charcuterie includes common allergens such as nuts, dairy,
+            gluten and pork. Tell us about allergies when you book. Every item
+            is labeled, and we can prepare nut-free or vegetarian options on
+            request. Because everything is prepared in the same space, we cannot
+            guarantee any item is allergen-free. Please share this with your
+            guests.
+          </p>
+
+          <h2>7. Outdoor Events and Venues</h2>
+          <p>
+            For outdoor events, please arrange shade or cover and a flat spot
+            for the carts. In heavy rain or heat we may move the carts under
+            cover to protect guests, food and flowers. You confirm your venue
+            allows our carts and tell us any venue rules (load-in times,
+            insurance certificate).
+          </p>
+
+          <h2>8. Photos</h2>
+          <p>
+            We may photograph our setup for our website and Instagram. We do not
+            post guests&apos; faces without permission. Tell us if you&apos;d
+            rather we didn&apos;t take photos.
+          </p>
+
+          <h2>9. Promo Codes</h2>
+          <p>
+            OLIVELLA5 gives 5% off the experience price of one new booking. One
+            code per event; codes can&apos;t be combined, except with the
+            founding-client extra hour.
+          </p>
+
+          <h2>10. Client Responsibilities</h2>
           <p>You agree to:</p>
           <ul>
             <li>
@@ -108,7 +126,7 @@ export default function TermsPage() {
             </li>
           </ul>
 
-          <h2>7. Limitation of Liability</h2>
+          <h2>11. Limitation of Liability</h2>
           <p>
             To the fullest extent permitted by Florida law, {site.name}&apos;s
             total liability for any claim arising from our services shall not
@@ -118,16 +136,7 @@ export default function TermsPage() {
             reputational harm.
           </p>
 
-          <h2>8. Food Safety and Allergens</h2>
-          <p>
-            Our grazing experiences include products containing common allergens
-            including dairy, gluten, tree nuts and cured meats. We are not a
-            certified allergen-free kitchen. Guests with severe food allergies
-            should exercise caution. Please notify us of any severe allergies
-            during the inquiry process and we will do our best to accommodate.
-          </p>
-
-          <h2>9. Intellectual Property</h2>
+          <h2>12. Intellectual Property</h2>
           <p>
             All photographs, videos and written content on this website are the
             property of {site.name} and may not be used, reproduced or
@@ -137,7 +146,7 @@ export default function TermsPage() {
             our website and social media.
           </p>
 
-          <h2>10. Governing Law</h2>
+          <h2>13. Governing Law</h2>
           <p>
             These Terms are governed by the laws of the State of Florida, without
             regard to conflict-of-law principles. Any disputes arising from these
@@ -145,14 +154,14 @@ export default function TermsPage() {
             located in Miami-Dade County, Florida.
           </p>
 
-          <h2>11. Changes to These Terms</h2>
+          <h2>14. Changes to These Terms</h2>
           <p>
             We reserve the right to update these Terms at any time. Changes take
             effect when posted to this page. Service agreements already in place
             are governed by the Terms in effect at the time of signing.
           </p>
 
-          <h2>12. Contact</h2>
+          <h2>15. Contact</h2>
           <p>
             Questions about these Terms can be directed to:
           </p>

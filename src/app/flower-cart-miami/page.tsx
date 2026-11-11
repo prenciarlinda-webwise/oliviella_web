@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { LeafSmall, FlowerBloom, OliveSprig } from "@/components/icons";
-import { formatTierPrice } from "@/lib/products";
+import PriceTable from "@/components/PriceTable";
+import { priceNotes } from "@/lib/products";
+import { pageMetadata } from "@/lib/seo";
 import { getExperience } from "@/lib/products-data";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Flower Cart Miami | Luxury Floral Experience",
+export const metadata = pageMetadata({
+  title: "Flower Cart & Flower Bar in Miami",
   description:
-    "Book a luxury flower cart in Miami for weddings, bridal showers, birthdays and corporate events. Guests receive hand-wrapped bouquets styled by Olivella. Serving Miami, Fort Lauderdale and the Palm Beaches.",
-  alternates: { canonical: "/flower-cart-miami" },
-};
+    "Flower cart in Miami from $1,500: guests choose their stems and our attendant wraps a bouquet to take home. Also known as a flower bar or bouquet bar. Serving Miami, Fort Lauderdale and the Palm Beaches.",
+  path: "/flower-cart-miami",
+});
 
 const events = [
   "Weddings",
@@ -50,16 +51,13 @@ export default async function FlowerCartMiamiPage() {
             Luxury flower cart experience in Miami
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
-            An interactive floral experience where guests select premium seasonal
-            blooms and receive hand-wrapped bouquets — the most talked-about
-            detail at events across {site.serviceArea}.
+            An interactive floral favor your guests will love: each guest
+            chooses their stems and our attendant wraps a bouquet for them to
+            take home.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button href="/book?experience=flower-cart-miami" withArrow>
-              Book your flower cart
-            </Button>
-            <Button href="/contact" variant="secondary">
-              Request a custom quote
+              Check your date
             </Button>
           </div>
         </Container>
@@ -104,29 +102,15 @@ export default async function FlowerCartMiamiPage() {
                 ))}
               </ul>
 
-              {/* Pricing */}
-              <div className="mt-7 rounded-2xl bg-white/70 p-6 ring-1 ring-olive-mist">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-rose">
-                  Starting Investment
-                </p>
-                <dl className="mt-4 divide-y divide-olive-mist/70">
-                  {cart.pricing.tiers.map((tier) => (
-                    <div
-                      key={tier.id}
-                      className="flex items-baseline justify-between gap-4 py-2.5"
-                    >
-                      <dt className="text-ink-soft">{tier.label}</dt>
-                      <dd className="text-right font-display text-xl text-olive-deep">
-                        {formatTierPrice(tier)}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
+              <PriceTable experience={cart}>
+                {priceNotes(cart.slug).map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </PriceTable>
 
               <div className="mt-7">
                 <Button href="/book?experience=flower-cart-miami" withArrow>
-                  Book this experience
+                  Check your date
                 </Button>
               </div>
             </div>
@@ -145,8 +129,9 @@ export default async function FlowerCartMiamiPage() {
               Miami flower cart events
             </h2>
             <p className="mt-4 text-lg text-ink-soft">
-              Our flower cart elevates any celebration, from intimate gatherings
-              to large-scale events across South Florida.
+              Also known as a flower bar or bouquet bar, it&apos;s the favor
+              guests actually keep, for intimate gatherings and large
+              celebrations across South Florida.
             </p>
           </div>
           <div className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-3">
@@ -176,13 +161,18 @@ export default async function FlowerCartMiamiPage() {
               within one business day with a curated proposal for your
               celebration in {site.serviceArea}.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-8 flex flex-col items-center gap-5">
               <Button href="/book?experience=flower-cart-miami" withArrow>
-                Book your flower cart
+                Check your date
               </Button>
-              <Button href="/contact" variant="secondary">
-                Get in touch
-              </Button>
+              <a
+                href={site.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold uppercase tracking-[0.12em] text-olive-deep underline underline-offset-4 hover:text-olive"
+              >
+                Message us on WhatsApp
+              </a>
             </div>
           </div>
         </Container>

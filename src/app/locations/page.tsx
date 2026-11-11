@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { PinIcon, FlowerBloom } from "@/components/icons";
 import { site } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Flower Cart & Food Cart Locations in Miami | Areas We Serve",
+export const metadata = pageMetadata({
+  title: "Areas We Serve | Flower Cart & Charcuterie Cart in South Florida",
   description:
-    "Olivella serves flower cart and food cart events across Miami, Fort Lauderdale and the Palm Beaches. See our primary and extended service areas throughout South Florida.",
-  alternates: { canonical: "/locations" },
-};
+    "Olivella brings its flower cart and charcuterie cart across South Florida. No travel fee in Miami-Dade; $150 in Broward and $300 in Palm Beach County.",
+  path: "/locations",
+});
 
 const primaryAreas = [
   "Coral Gables",
@@ -22,9 +22,6 @@ const primaryAreas = [
   "Downtown Miami",
   "The Roads",
   "Shenandoah",
-];
-
-const extendedAreas = [
   "Miami Beach",
   "Bal Harbour",
   "Surfside",
@@ -32,6 +29,9 @@ const extendedAreas = [
   "Sunny Isles Beach",
   "Aventura",
   "Doral",
+];
+
+const extendedAreas = [
   "Weston",
   "Fort Lauderdale",
   "Boca Raton",
@@ -57,11 +57,11 @@ export default function LocationsPage() {
             Areas We Serve
           </span>
           <h1 className="mx-auto mt-5 max-w-3xl text-balance text-5xl text-olive-deep sm:text-6xl">
-            Flower cart &amp; food cart across South Florida
+            Floral and charcuterie experiences across South Florida
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
             {site.name} proudly serves clients throughout South Florida, bringing
-            luxury floral and grazing experiences directly to your celebration
+            floral and charcuterie experiences directly to your celebration
             in {site.serviceArea}.
           </p>
         </Container>
@@ -74,14 +74,13 @@ export default function LocationsPage() {
             {/* Primary */}
             <div className="rounded-[2rem] bg-white/60 p-8 ring-1 ring-olive-mist sm:p-10">
               <span className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
-                Priority scheduling
+                Miami-Dade
               </span>
               <h2 className="mt-3 font-display text-3xl text-olive-deep">
                 Primary service areas
               </h2>
               <p className="mt-3 text-ink-soft">
-                Our core Miami neighborhoods, with priority scheduling and same-day
-                styling available.
+                Our home area. No travel fee.
               </p>
               <ul className="mt-6 flex flex-wrap gap-2.5">
                 {primaryAreas.map((city) => (
@@ -104,8 +103,7 @@ export default function LocationsPage() {
                 Extended service areas
               </h2>
               <p className="mt-3 text-ink-soft">
-                From the beaches up through Broward and the Palm Beaches — we
-                bring the full Olivella experience wherever you celebrate.
+                Travel fee: $150 in Broward, $300 in Palm Beach County.
               </p>
               <ul className="mt-6 flex flex-wrap gap-2.5">
                 {extendedAreas.map((city) => (
@@ -135,8 +133,8 @@ export default function LocationsPage() {
                 request. Reach out and tell us about your event.
               </p>
               <div className="mt-5">
-                <Button href="/contact" variant="secondary" withArrow>
-                  Tell us about your destination event
+                <Button href="/book" variant="secondary" withArrow>
+                  Check your date
                 </Button>
               </div>
             </div>
@@ -155,7 +153,7 @@ export default function LocationsPage() {
               We come to you
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-cream/80">
-              Our flower cart and food cart experiences are fully mobile. We
+              Our flower cart and charcuterie cart experiences are fully mobile. We
               arrive, style everything on-site, and break down once the last
               guest has gone — no venue setup required on your end.
             </p>
@@ -169,18 +167,15 @@ export default function LocationsPage() {
           <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-blush-soft to-cream px-8 py-16 text-center ring-1 ring-white/60 sm:px-16">
             <FlowerBloom className="absolute -bottom-6 -right-6 h-28 w-28 text-rose/25" />
             <h2 className="text-4xl text-olive-deep sm:text-5xl">
-              Book a flower cart or food cart in {site.city}
+              Book a flower cart or charcuterie cart in {site.city}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
               Tell us your event date, location and guest count and we will put
               together a curated proposal for your celebration.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-8 flex justify-center">
               <Button href="/book" withArrow>
-                Reserve your experience
-              </Button>
-              <Button href="/contact" variant="secondary">
-                Request a custom quote
+                Check your date
               </Button>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { requireAdminApi } from "@/lib/auth/require-admin";
-import { readExperiences, writeExperiences } from "@/lib/products-data";
+import { mutateExperiences } from "@/lib/products-data";
 import type { PriceTier } from "@/lib/products";
 
 export const runtime = "nodejs";
@@ -106,22 +106,23 @@ export async function PATCH(
     );
   }
 
-  const experiences = await readExperiences();
-  const index = experiences.findIndex((e) => e.slug === slug);
-  if (index === -1) {
+  const found = await mutateExperiences((experiences) => {
+    const index = experiences.findIndex((e) => e.slug === slug);
+    if (index === -1) return { next: null, result: false };
+    const current = experiences[index]!;
+    experiences[index] = {
+      ...current,
+      name,
+      subtitle,
+      description,
+      includes,
+      pricing: { ...current.pricing, tiers: tiers! },
+    };
+    return { next: experiences, result: true };
+  });
+  if (!found) {
     return NextResponse.json({ error: "Product not found." }, { status: 404 });
   }
-
-  const current = experiences[index]!;
-  experiences[index] = {
-    ...current,
-    name,
-    subtitle,
-    description,
-    includes,
-    pricing: { ...current.pricing, tiers: tiers! },
-  };
-  await writeExperiences(experiences);
 
   return NextResponse.json({ ok: true });
 }

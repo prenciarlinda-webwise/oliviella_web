@@ -37,18 +37,34 @@ export type Experience = {
   bookable: boolean;
 };
 
-export const addOns: string[] = [
-  "Custom Floral Palettes",
-  "Premium Imported Roses",
-  "Champagne Styling",
-  "Riviera Umbrellas & Décor",
-  "Personalized Wrapping",
-  "Candlelit Ambiance",
-  "Personalized Menu Cards",
-  "Custom Event Branding",
-  "Honeycomb Display",
-  "Luxury Floral Installations",
+export type AddOn = { name: string; price: string };
+
+export const addOns: AddOn[] = [
+  { name: "Extra hour of service", price: "$250 flower cart · $350 charcuterie cart" },
+  { name: "Premium blooms upgrade (garden roses, peonies in season)", price: "+$10 per guest" },
+  { name: "Engraved mini olive-wood board favor", price: "$7 each" },
 ];
+
+// ─── Shared customer-facing copy ─────────────────────────────────────────
+// Kept in code (not in data/products.json) so the same words appear on every
+// page that shows them.
+
+export const SALES_TAX_NOTE = "Prices do not include Florida sales tax.";
+
+export const TRAVEL_NOTE =
+  "No travel fee in Miami-Dade; $150 in Broward and $300 in Palm Beach County.";
+
+/** The "Every package includes…" line shown under each experience's price table. */
+export const INCLUDED_NOTES: Record<string, string> = {
+  "flower-cart-miami": `Every package includes about 8 premium stems per guest, a hand-wrapped bouquet, an on-site attendant, 2 hours of service, delivery, setup and breakdown. ${TRAVEL_NOTE} ${SALES_TAX_NOTE}`,
+  "food-cart-miami": `Every package includes imported cheeses and charcuterie, seasonal fruit, honey and bread, an on-site attendant, 2 hours of continuous service, delivery, setup and breakdown. Every item is labeled; vegetarian and nut-free options with notice. Tell us about allergies when you book. ${TRAVEL_NOTE} ${SALES_TAX_NOTE}`,
+};
+
+export const SIGNATURE_SAVINGS =
+  "Save about 10% (up to $1,050) compared with booking the Flower Cart and Charcuterie Cart Experiences separately.";
+
+export const BOOKING_PARAGRAPH =
+  "Booking takes three steps. First, check your date with our short form; it’s free. Within one business day we send a proposal for your event. To reserve your date, sign the agreement and pay a 30% non-refundable retainer. The balance is due 14 days before your event.";
 
 // --- Booking eligibility -------------------------------------------------
 // These helpers are pure and client-safe (no secrets). They are the single
@@ -86,4 +102,16 @@ export function isPayableTier(tier: PriceTier): boolean {
 export function formatTierPrice(tier: PriceTier): string {
   if (tier.priceCents === null) return "Custom proposal";
   return `Starting at $${(tier.priceCents / 100).toLocaleString("en-US")}`;
+}
+
+/** Lines shown under an experience's price table. */
+export function priceNotes(slug: string): string[] {
+  if (slug === "olivella-signature-experience") {
+    return [
+      SIGNATURE_SAVINGS,
+      `Includes everything in the Flower Cart and Charcuterie Cart Experiences. ${TRAVEL_NOTE} ${SALES_TAX_NOTE}`,
+    ];
+  }
+  const note = INCLUDED_NOTES[slug];
+  return note ? [note] : [SALES_TAX_NOTE];
 }

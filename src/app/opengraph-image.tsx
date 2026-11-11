@@ -27,7 +27,7 @@ export default function OpengraphImage() {
             fontSize: 40,
             letterSpacing: 8,
             textTransform: "uppercase",
-            color: "#6f774a",
+            color: "#5f6640",
           }}
         >
           Miami
@@ -41,7 +41,7 @@ export default function OpengraphImage() {
             fontFamily: "Arial, sans-serif",
           }}
         >
-          Charcuterie and flower carts
+          Flower cart & charcuterie cart
         </div>
       </div>
     ),

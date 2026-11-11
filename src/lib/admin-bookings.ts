@@ -45,7 +45,10 @@ export async function loadBookings(): Promise<LoadBookingsResult> {
   let data;
   try {
     const stripe = getStripe();
-    ({ data } = await stripe.paymentIntents.list({ limit: 50 }));
+    // Auto-paginate so older bookings don't silently drop off, and keep only
+    // website bookings — balance-invoice payments are PaymentIntents too.
+    data = (await stripe.paymentIntents.list({ limit: 100 }).autoPagingToArray({ limit: 500 }))
+      .filter((pi) => Boolean(pi.metadata?.experienceSlug));
   } catch (err) {
     console.error("[admin/bookings] Failed to load bookings from Stripe", err);
     return {

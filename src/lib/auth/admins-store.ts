@@ -3,7 +3,7 @@ import "server-only";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { atomicWriteJson, withFileLock } from "@/lib/json-store";
+import { mutateJson, type Mutation } from "@/lib/json-store";
 
 export type AdminRole = "system" | "shop";
 
@@ -30,8 +30,11 @@ export async function readAdmins(): Promise<AdminRecord[]> {
   }
 }
 
-export async function writeAdmins(next: AdminRecord[]): Promise<void> {
-  await withFileLock("admins", () => atomicWriteJson(ADMINS_PATH, next));
+/** Locked read-modify-write of the admin list — use this for every change. */
+export function mutateAdmins<R>(
+  fn: (current: AdminRecord[]) => Mutation<AdminRecord[], R> | Promise<Mutation<AdminRecord[], R>>,
+): Promise<R> {
+  return mutateJson("admins", readAdmins, ADMINS_PATH, fn);
 }
 
 export async function findAdminByEmail(email: string): Promise<AdminRecord | undefined> {
